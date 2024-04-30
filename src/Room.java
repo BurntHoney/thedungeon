@@ -1,12 +1,13 @@
 import java.util.ArrayList;
 
 public class Room {
+
     private boolean visited = false;
     private Enemy[] enemies;
     private String[] loot;
     private Boolean locked;
     private String lockItem;
-    public final String code;
+    public String code;
 
     Room(String code){
         this.code = code;
@@ -43,7 +44,9 @@ public class Room {
 
     public Boolean isLocked(){return this.locked;}
     public boolean unlock(ArrayList<String> inventory){
-        if (inventory.contains(this.lockItem)) this.locked = false;
+        if (inventory.contains(this.lockItem)) {
+            this.code = "u";
+        };
         return this.locked;
     }
 }

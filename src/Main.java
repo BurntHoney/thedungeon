@@ -1,20 +1,19 @@
-import java.util.Scanner;
-
 public class Main {
+    public static Display display = new Display();
+    public static Game game = new Game();
+    public static Player player = new Player();
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        display.display();
 
-        System.out.print("Enter you name: ");
-        String playerName = scanner.nextLine();
-
-        Player player = new Player(playerName, 10, 10);
-        Game game = new Game(player);
+        display.printLine("SYSTEM","What is your name?");
+        display.printLine("PLAYER", display.readLine("Name: "));
 
         while (!game.getGameOver()){
-            game.drawGrid(scanner);
-            game.gameLoop(scanner);
+            display.display();
+            game.gameLoop();
         }
 
-        scanner.close();
+        display.close();
     }
 }
