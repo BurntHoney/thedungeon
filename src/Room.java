@@ -1,52 +1,34 @@
 import java.util.ArrayList;
 
 public class Room {
+    public String code;
+    private String lockItem = null;
 
     private boolean visited = false;
-    private Enemy[] enemies;
-    private String[] loot;
-    private Boolean locked;
-    private String lockItem;
-    public String code;
+    public ArrayList<Enemy> enemies = new ArrayList<>();
+    public ArrayList<String> loot = new ArrayList<>();
+
+
+
 
     Room(String code){
         this.code = code;
-        this.enemies = new Enemy[0];
     }
 
-    Room(String code, Boolean locked, String lockItem) {
-        this.locked = locked;
+    Room(String code, String lockItem){
+        this.code = code;
         this.lockItem = lockItem;
-        this.code = code;
-        this.enemies = new Enemy[0];
     }
-
-    Room(String code, String[] loot){
-        this.loot = loot;
-        this.code = code;
-        this.enemies = new Enemy[0];
-    }
-
-    Room(String code, Enemy[] enemies){
-        this.enemies = enemies;
-        this.code = code;
-    }
-
 
     public boolean isVisited() {return this.visited;}
     public void visit(){this.visited = true;}
 
-    public void clearEnemies(){this.enemies = null;}
-    public Enemy[] getEnemies(){return this.enemies;}
 
-    public String[] getLoot(){return this.loot;}
-    public void clearLoot(){this.loot = null;}
-
-    public Boolean isLocked(){return this.locked;}
+    public Boolean isLocked(){return this.code.equals("l");}
     public boolean unlock(ArrayList<String> inventory){
         if (inventory.contains(this.lockItem)) {
-            this.code = "u";
+            this.code = " ";
         };
-        return this.locked;
+        return this.code.equals("l");
     }
 }

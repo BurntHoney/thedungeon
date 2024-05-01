@@ -4,11 +4,19 @@ public class Main {
     public static Player player = new Player();
 
     public static void main(String[] args) {
-        display.display();
+        // Get Player Name
+        display.printLine("system","What is your name?");
 
-        display.printLine("SYSTEM","What is your name?");
-        display.printLine("PLAYER", display.readLine("Name: "));
+        String playerName = display.readLine("Name: ");
+        display.printLine("player", playerName);
+        display.printLine("system", String.format("welcome to the dungeon %s", playerName));
 
+        player.inventory.add("basic potion");
+        player.inventory.add("basic potion");
+        player.inventory.add("basic potion");
+        player.inventory.add("key");
+
+        // Game Loop
         while (!game.getGameOver()){
             display.display();
             game.gameLoop();

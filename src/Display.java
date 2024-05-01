@@ -14,6 +14,7 @@ public class Display {
 
         final int DISPLAY_HEIGHT = 28;
 
+        // Group Components By Columns
         ArrayList<String> infoColumn = new ArrayList<>();
         infoColumn.addAll(renderGrid());
         infoColumn.addAll(renderCommands());
@@ -22,6 +23,7 @@ public class Display {
         ArrayList<String> consoleColumn = renderConsole();
         ArrayList<String> roomColumn = renderRoom();
 
+        // Print Component's Line By Line
         System.out.println("┌──────────────────────────────────────────────────────TheDungeon───────────────────────────────────────────────────────┐");
 
         for (int i = 0; i < DISPLAY_HEIGHT; i++)
@@ -87,8 +89,28 @@ public class Display {
     }
 
     private ArrayList<String> renderInventory() {
+        ArrayList<String> items = new ArrayList<>();
+        ArrayList<Integer> count = new ArrayList<>();
+
+        for (int i = 0; i < Main.player.inventory.size(); i++) {
+            String item = Main.player.inventory.get(i);
+            if (items.contains(item)){
+                int index = items.indexOf(item);
+                count.set(index, count.get(index) + 1);
+                continue;
+            }
+            items.add(item);
+            count.add(1);
+        }
+
         ArrayList<String> lines = new ArrayList<>();
-        for (int y = 0; y < 8; y++) {
+
+        for (int i = 0; i < items.size(); i++) {
+            lines.add(String.format("│%-29s│", " - " + items.get(i) + " x" + count.get(i)));
+        }
+
+        // Padding
+        for (int y = lines.size(); y < 8; y++) {
             lines.add(String.format("│%-29s│", ""));
         }
 
@@ -112,8 +134,19 @@ public class Display {
     private ArrayList<String> renderRoom() {
         ArrayList<String> lines = new ArrayList<>();
 
+        lines.add(String.format("│%-28s│", "player: "));
+        lines.add(String.format("│%-28s│", " - health: " + Main.player.health));
+        lines.add(String.format("│%-28s│", " - damage: " + Main.player.damage));
+
+        ArrayList<Enemy> enemies = Main.game.grid[Main.game.yPos][Main.game.xPos].enemies;
+        for (int i = 0; i < enemies.size(); i++) {
+            lines.add(String.format("│%-28s│", ""));
+            lines.add(String.format("│%-28s│", enemies.get(i).name + ":"));
+            lines.add(String.format("│%-28s│", " - health: " + enemies.get(i).health));
+        }
+
         // Pad the end of the lines
-        for (int i = 0; i < MAX_BUFFER_SIZE; i++)
+        for (int i = lines.size(); i < MAX_BUFFER_SIZE; i++)
             lines.add(String.format("│%-28s│", ""));
 
         lines.addFirst("┌─────────────Room───────────┐");
