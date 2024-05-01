@@ -1,7 +1,11 @@
+import java.util.ArrayList;
+
 public class Enemy {
     public final String name;
     public int health;
     public final int damage;
+
+    public ArrayList<String> inventory = new ArrayList<>();
 
     Enemy(String name, int health, int damage) {
         this.name = name;

@@ -11,11 +11,6 @@ public class Main {
         display.printLine("player", playerName);
         display.printLine("system", String.format("welcome to the dungeon %s", playerName));
 
-        player.inventory.add("basic potion");
-        player.inventory.add("basic potion");
-        player.inventory.add("basic potion");
-        player.inventory.add("key");
-
         // Game Loop
         while (!game.getGameOver()){
             display.display();
