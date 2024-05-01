@@ -7,9 +7,7 @@ public class Room {
     private boolean visited = false;
     public ArrayList<Enemy> enemies = new ArrayList<>();
     public ArrayList<String> loot = new ArrayList<>();
-
-
-
+    public String story;
 
     Room(String code){
         this.code = code;
@@ -20,9 +18,11 @@ public class Room {
         this.lockItem = lockItem;
     }
 
-    public boolean isVisited() {return this.visited;}
-    public void visit(){this.visited = true;}
-
+    public void enter(){
+        if(!this.visited)
+            this.visited = true;
+        Main.display.printLine("system", story);
+    }
 
     public Boolean isLocked(){return this.code.equals("l");}
     public boolean unlock(ArrayList<String> inventory){

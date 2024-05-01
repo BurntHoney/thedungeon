@@ -7,6 +7,29 @@ public class Display {
 
     private final ArrayList<String> buffer = new ArrayList<>(MAX_BUFFER_SIZE);
 
+    final String DUNGEON_HEADER = "┌" + "─".repeat(87) + "TheDungeon" + "─".repeat(88) +"┐";;
+    final String DUNGEON_FOOTER = "└" + "─".repeat(185) + "┘";
+
+    final String MAP_HEADER = "┌─────┬─────┬─Map─┬─────┬─────┐";
+    final String MAP_CENTER = "├─────┼─────┼─────┼─────┼─────┤";
+    final String MAP_FOOTER = "└─────┴─────┴─────┴─────┴─────┘";
+
+    final String COMMANDS_HEADER  = "┌───────────Commands──────────┐";
+    final String COMMANDS_FOOTER  = "└─────────────────────────────┘";
+
+    final String INVENTORY_HEADER  = "┌──────────Inventory──────────┐";
+    final String INVENTORY_PADDING = "│                             │";
+    final String INVENTORY_FOOTER  = "└─────────────────────────────┘";
+
+    // Too large so we generate it at the start and leave it
+    final String CONSOLE_HEADER = "┌" + "─".repeat(121) + "┐";
+    final String CONSOLE_FOOTER = "└" + "─".repeat(121) + "┘";
+    final String CONSOLE_PADDING = "│" + " ".repeat(121) + "│";
+
+    final String ROOM_HEADER  = "┌─────────────Room────────────┐";
+    final String ROOM_PADDING = "│                             │";
+    final String ROOM_FOOTER  = "└─────────────────────────────┘";
+
     public void display() {
         // clear terminal: source: https://www.javatpoint.com/how-to-clear-screen-in-java
         System.out.print("\033[H\033[2J");
@@ -24,17 +47,18 @@ public class Display {
         ArrayList<String> roomColumn = renderRoom();
 
         // Print Component's Line By Line
-        System.out.println("┌──────────────────────────────────────────────────────TheDungeon───────────────────────────────────────────────────────┐");
+        System.out.println(DUNGEON_HEADER);
 
         for (int i = 0; i < DISPLAY_HEIGHT; i++)
             System.out.println("│" + infoColumn.get(i) + consoleColumn.get(i) + roomColumn.get(i) + "│");
 
-        System.out.println("└───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘");
+        System.out.println(DUNGEON_FOOTER);
     }
 
     private ArrayList<String> renderGrid() {
-        ArrayList<String> mapCodes = new ArrayList<>();
+        ArrayList<String> mapCodes = new ArrayList<>(25);
 
+        // Make it easier to place the player
         for (int y = 0; y < 5; y++)
             for (int x = 0; x < 5; x++)
                 mapCodes.add(Main.game.grid[y][x].code);
@@ -43,32 +67,22 @@ public class Display {
 
         ArrayList<String> lines = new ArrayList<>();
 
-        lines.add("┌─────┬─────┬─Map─┬─────┬─────┐");
-        lines.add(String.format(
-                "│  %s  │  %s  │  %s  │  %s  │  %s  │",
-                mapCodes.get(0), mapCodes.get(1), mapCodes.get(2), mapCodes.get(3), mapCodes.get(4)
-        ));
-        lines.add("├─────┼─────┼─────┼─────┼─────┤");
-        lines.add(String.format(
-                "│  %s  │  %s  │  %s  │  %s  │  %s  │",
-                mapCodes.get(5), mapCodes.get(6), mapCodes.get(7), mapCodes.get(8), mapCodes.get(9)
-        ));
-        lines.add("├─────┼─────┼─────┼─────┼─────┤");
-        lines.add(String.format(
-                "│  %s  │  %s  │  %s  │  %s  │  %s  │",
-                mapCodes.get(10), mapCodes.get(11), mapCodes.get(12), mapCodes.get(13), mapCodes.get(14)
-        ));
-        lines.add("├─────┼─────┼─────┼─────┼─────┤");
-        lines.add(String.format(
-                "│  %s  │  %s  │  %s  │  %s  │  %s  │",
-                mapCodes.get(15), mapCodes.get(16), mapCodes.get(17), mapCodes.get(18), mapCodes.get(19)
-        ));
-        lines.add("├─────┼─────┼─────┼─────┼─────┤");
-        lines.add(String.format(
-                "│  %s  │  %s  │  %s  │  %s  │  %s  │",
-                mapCodes.get(20), mapCodes.get(21), mapCodes.get(22), mapCodes.get(23), mapCodes.get(24)
-        ));
-        lines.add("└─────┴─────┴─────┴─────┴─────┘");
+        for (int y = 0; y < 5; y++) {
+            lines.add(String.format(
+                    "│  %s  │  %s  │  %s  │  %s  │  %s  │",
+                    mapCodes.get(5 * y),
+                    mapCodes.get(5 * y + 1),
+                    mapCodes.get(5 * y + 2),
+                    mapCodes.get(5 * y + 3),
+                    mapCodes.get(5 * y + 4)
+            ));
+            lines.add(MAP_CENTER);
+        }
+
+        // Get rid of the last map center
+        lines.removeLast();
+        lines.addFirst(MAP_HEADER);
+        lines.addLast(MAP_FOOTER);
 
         return lines;
     }
@@ -83,8 +97,8 @@ public class Display {
         lines.add(String.format("│%-29s│", "quit"));
 
         // Header and Footer
-        lines.addFirst("┌───────────Commands──────────┐");
-        lines.addLast("└─────────────────────────────┘");
+        lines.addFirst(COMMANDS_HEADER);
+        lines.addLast(COMMANDS_FOOTER);
         return lines;
     }
 
@@ -106,51 +120,51 @@ public class Display {
         ArrayList<String> lines = new ArrayList<>();
 
         for (int i = 0; i < items.size(); i++) {
-            lines.add(String.format("│%-29s│", " - " + items.get(i) + " x" + count.get(i)));
+            lines.add(String.format("│ - %-26s│", items.get(i) + " x" + count.get(i)));
         }
 
         // Padding
-        for (int y = lines.size(); y < 8; y++) {
-            lines.add(String.format("│%-29s│", ""));
-        }
+        for (int i = lines.size(); i < 8; i++)
+            lines.add(INVENTORY_PADDING);
 
-        lines.addFirst("┌──────────Inventory──────────┐");
-        lines.addLast("└─────────────────────────────┘");
+        lines.addFirst(INVENTORY_HEADER);
+        lines.addLast(INVENTORY_FOOTER);
         return lines;
     }
 
     private ArrayList<String> renderConsole() {
         ArrayList<String> lines = new ArrayList<>(buffer);
-        lines.replaceAll(s -> String.format("│%-56s│", s));
+        lines.replaceAll(s -> String.format("│%-121s│", s));
 
         // Pad the end of the lines
-        for (int i = lines.size(); i < MAX_BUFFER_SIZE; i++) lines.add(String.format("│%-56s│", ""));
+        for (int i = lines.size(); i < MAX_BUFFER_SIZE; i++)
+            lines.add(CONSOLE_PADDING);
 
-        lines.addFirst("┌────────────────────────Console─────────────────────────┐");
-        lines.addLast("└────────────────────────────────────────────────────────┘");
+        lines.addFirst(CONSOLE_HEADER);
+        lines.addLast(CONSOLE_FOOTER);
         return lines;
     }
 
     private ArrayList<String> renderRoom() {
         ArrayList<String> lines = new ArrayList<>();
 
-        lines.add(String.format("│%-28s│", "player: "));
-        lines.add(String.format("│%-28s│", " - health: " + Main.player.health));
-        lines.add(String.format("│%-28s│", " - damage: " + Main.player.damage));
+        lines.add(String.format("│%-29s│", "player: "));
+        lines.add(String.format("│%-29s│", " - health: " + Main.player.health));
+        lines.add(String.format("│%-29s│", " - damage: " + Main.player.damage));
 
         ArrayList<Enemy> enemies = Main.game.grid[Main.game.yPos][Main.game.xPos].enemies;
         for (int i = 0; i < enemies.size(); i++) {
-            lines.add(String.format("│%-28s│", ""));
-            lines.add(String.format("│%-28s│", enemies.get(i).name + ":"));
-            lines.add(String.format("│%-28s│", " - health: " + enemies.get(i).health));
+            lines.add(ROOM_PADDING);
+            lines.add(String.format("│%-29s│", enemies.get(i).name + ":"));
+            lines.add(String.format("│%-29s│", " - health: " + enemies.get(i).health));
         }
 
         // Pad the end of the lines
         for (int i = lines.size(); i < MAX_BUFFER_SIZE; i++)
-            lines.add(String.format("│%-28s│", ""));
+            lines.add(ROOM_PADDING);
 
-        lines.addFirst("┌─────────────Room───────────┐");
-        lines.addLast("└────────────────────────────┘");
+        lines.addFirst(ROOM_HEADER);
+        lines.addLast(ROOM_FOOTER);
         return lines;
     }
 

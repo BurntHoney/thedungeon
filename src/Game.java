@@ -32,7 +32,7 @@ public class Game {
 
         grid[1][4] = new Room("m");
 
-        Enemy miniboss = new Enemy("Giant Skeleton", 8, 2);
+        Enemy miniboss = new Enemy("Giant Skeleton", 8, 2, "yippee freedom");
         miniboss.inventory.add("door_key");
         grid[1][4].enemies.add(miniboss);
 
@@ -48,7 +48,7 @@ public class Game {
         grid[3][3] = new Room(" ");
 
         grid[3][4] = new Room("b");
-        Enemy boss = new Enemy("Minotaur", 8, 2);
+        Enemy boss = new Enemy("Minotaur", 8, 2, "ahhhhhh!!!!!!");
         boss.inventory.add("exit_key");
         grid[3][4].enemies.add(boss);
 
