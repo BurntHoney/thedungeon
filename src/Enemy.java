@@ -2,15 +2,18 @@ import java.util.ArrayList;
 
 public class Enemy {
     public final String name;
+    public int maxHealth;
     public int health;
     public final int damage;
     public String deathLine;
+    public boolean isBoss = true;
 
     public ArrayList<String> inventory = new ArrayList<>();
 
     Enemy(String name, int health, int damage) {
         this.name = name;
         this.health = health;
+        this.maxHealth = health;
         this.damage = damage;
     }
 

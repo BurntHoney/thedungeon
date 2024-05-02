@@ -2,45 +2,45 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Display {
-    private final int MAX_BUFFER_SIZE = 26;
+    private final int MAX_BUFFER_SIZE = 42;
     private final Scanner input = new Scanner(System.in);
 
     private final ArrayList<String> buffer = new ArrayList<>(MAX_BUFFER_SIZE);
 
-    final String DUNGEON_HEADER = "┌" + "─".repeat(87) + "TheDungeon" + "─".repeat(88) +"┐";;
-    final String DUNGEON_FOOTER = "└" + "─".repeat(185) + "┘";
+    static final String DUNGEON_HEADER = "┌" + "─".repeat(87) + "TheDungeon" + "─".repeat(88) +"┐";;
+    static final String DUNGEON_FOOTER = "└" + "─".repeat(185) + "┘";
 
-    final String MAP_HEADER = "┌─────┬─────┬─Map─┬─────┬─────┐";
-    final String MAP_CENTER = "├─────┼─────┼─────┼─────┼─────┤";
-    final String MAP_FOOTER = "└─────┴─────┴─────┴─────┴─────┘";
+    static final String COMMANDS_HEADER  = "┌─────────────────────Commands────────────────────┐";
+    static final String COMMANDS_FOOTER  = "└─────────────────────────────────────────────────┘";
 
-    final String COMMANDS_HEADER  = "┌───────────Commands──────────┐";
-    final String COMMANDS_FOOTER  = "└─────────────────────────────┘";
+    static final String STATS_HEADER  = "┌────────────────────────Stats────────────────────┐";
+    static final String STATS_FOOTER  = "└─────────────────────────────────────────────────┘";
 
-    final String INVENTORY_HEADER  = "┌──────────Inventory──────────┐";
-    final String INVENTORY_PADDING = "│                             │";
-    final String INVENTORY_FOOTER  = "└─────────────────────────────┘";
+    static final String INVENTORY_HEADER  = "┌─────────────────────Inventory───────────────────┐";
+    static final String INVENTORY_PADDING = "│                                                 │";
+    static final String INVENTORY_FOOTER  = "└─────────────────────────────────────────────────┘";
 
     // Too large so we generate it at the start and leave it
-    final String CONSOLE_HEADER = "┌" + "─".repeat(121) + "┐";
-    final String CONSOLE_FOOTER = "└" + "─".repeat(121) + "┘";
-    final String CONSOLE_PADDING = "│" + " ".repeat(121) + "│";
+    static final String CONSOLE_HEADER = "┌" + "─".repeat(101) + "┐";
+    static final String CONSOLE_FOOTER = "└" + "─".repeat(101) + "┘";
+    static final String CONSOLE_PADDING = "│" + " ".repeat(101) + "│";
 
-    final String ROOM_HEADER  = "┌─────────────Room────────────┐";
-    final String ROOM_PADDING = "│                             │";
-    final String ROOM_FOOTER  = "└─────────────────────────────┘";
+    static final String ROOM_HEADER  = "┌─────────────Room────────────┐";
+    static final String ROOM_PADDING = "│                             │";
+    static final String ROOM_FOOTER  = "└─────────────────────────────┘";
 
     public void display() {
         // clear terminal: source: https://www.javatpoint.com/how-to-clear-screen-in-java
         System.out.print("\033[H\033[2J");
         System.out.flush();
 
-        final int DISPLAY_HEIGHT = 28;
+        final int DISPLAY_HEIGHT = 44;
 
         // Group Components By Columns
         ArrayList<String> infoColumn = new ArrayList<>();
         infoColumn.addAll(renderGrid());
         infoColumn.addAll(renderCommands());
+        infoColumn.addAll(renderStats());
         infoColumn.addAll(renderInventory());
 
         ArrayList<String> consoleColumn = renderConsole();
@@ -67,22 +67,74 @@ public class Display {
 
         ArrayList<String> lines = new ArrayList<>();
 
-        for (int y = 0; y < 5; y++) {
-            lines.add(String.format(
-                    "│  %s  │  %s  │  %s  │  %s  │  %s  │",
-                    mapCodes.get(5 * y),
-                    mapCodes.get(5 * y + 1),
-                    mapCodes.get(5 * y + 2),
-                    mapCodes.get(5 * y + 3),
-                    mapCodes.get(5 * y + 4)
-            ));
-            lines.add(MAP_CENTER);
-        }
+        lines.add("┌────────────────────────Map──────────────────────┐");
+        lines.add("│┌─────┬─────┬─────┬─────┬─────┐┌─────Legend─────┐│");
 
-        // Get rid of the last map center
-        lines.removeLast();
-        lines.addFirst(MAP_HEADER);
-        lines.addLast(MAP_FOOTER);
+        lines.add(String.format("││  %s  │  %s  │  %s  │  %s  │  %s  ││ x = player     ││",
+                mapCodes.get(0),
+                mapCodes.get(1),
+                mapCodes.get(2),
+                mapCodes.get(3),
+                mapCodes.get(4)
+        ));
+
+        lines.add("│├─────┼─────┼─────┼─────┼─────┤│ w = wall       ││");
+
+        lines.add(String.format("││  %s  │  %s  │  %s  │  %s  │  %s  ││ l = locked     ││",
+                mapCodes.get(5),
+                mapCodes.get(6),
+                mapCodes.get(7),
+                mapCodes.get(8),
+                mapCodes.get(9)
+        ));
+        lines.add("│├─────┼─────┼─────┼─────┼─────┤│ t = treasure   ││");
+        lines.add(String.format("││  %s  │  %s  │  %s  │  %s  │  %s  ││ m = mini boss  ││",
+                mapCodes.get(10),
+                mapCodes.get(11),
+                mapCodes.get(12),
+                mapCodes.get(13),
+                mapCodes.get(14)
+        ));
+
+        lines.add("│├─────┼─────┼─────┼─────┼─────┤│ b = boss       ││");
+
+        lines.add(String.format("││  %s  │  %s  │  %s  │  %s  │  %s  ││                ││",
+                mapCodes.get(15),
+                mapCodes.get(16),
+                mapCodes.get(17),
+                mapCodes.get(18),
+                mapCodes.get(19)
+        ));
+
+        lines.add("│├─────┼─────┼─────┼─────┼─────┤│                ││");
+
+        lines.add(String.format("││  %s  │  %s  │  %s  │  %s  │  %s  ││                ││",
+                mapCodes.get(20),
+                mapCodes.get(21),
+                mapCodes.get(22),
+                mapCodes.get(23),
+                mapCodes.get(24)
+        ));
+
+        lines.add("│└─────┴─────┴─────┴─────┴─────┘└────────────────┘│");
+        lines.add("└─────────────────────────────────────────────────┘");
+//
+//        for (int y = 0; y < 5; y++) {
+//            lines.add(String.format(
+//                    "│  %s  │  %s  │  %s  │  %s  │  %s  │",
+//                    mapCodes.get(5 * y),
+//                    mapCodes.get(5 * y + 1),
+//                    mapCodes.get(5 * y + 2),
+//                    mapCodes.get(5 * y + 3),
+//                    mapCodes.get(5 * y + 4)
+//            ));
+//            lines.add(MAP_CENTER);
+//        }
+//
+//        // Get rid of the last map center
+//        lines.removeLast();
+//        lines.addFirst(MAP_HEADER);
+//        lines.addLast(MAP_FOOTER);
 
         return lines;
     }
@@ -90,11 +142,11 @@ public class Display {
     private ArrayList<String> renderCommands() {
         ArrayList<String> lines = new ArrayList<>();
 
-        lines.add(String.format("│%-29s│", "move <direction>"));
-        lines.add(String.format("│%-29s│", "use <item>"));
-        lines.add(String.format("│%-29s│", "loot <target>"));
-        lines.add(String.format("│%-29s│", "attack <target>"));
-        lines.add(String.format("│%-29s│", "quit"));
+        lines.add(String.format("│%-49s│", "move <direction>"));
+        lines.add(String.format("│%-49s│", "use <item>"));
+        lines.add(String.format("│%-49s│", "loot <target>"));
+        lines.add(String.format("│%-49s│", "attack <target>"));
+        lines.add(String.format("│%-49s│", "quit"));
 
         // Header and Footer
         lines.addFirst(COMMANDS_HEADER);
@@ -120,11 +172,12 @@ public class Display {
         ArrayList<String> lines = new ArrayList<>();
 
         for (int i = 0; i < items.size(); i++) {
-            lines.add(String.format("│ - %-26s│", items.get(i) + " x" + count.get(i)));
+            lines.add(String.format("│ - %-46s│", items.get(i) + " x" + count.get(i)));
         }
 
+
         // Padding
-        for (int i = lines.size(); i < 8; i++)
+        for (int i = lines.size(); i < 19; i++)
             lines.add(INVENTORY_PADDING);
 
         lines.addFirst(INVENTORY_HEADER);
@@ -134,7 +187,7 @@ public class Display {
 
     private ArrayList<String> renderConsole() {
         ArrayList<String> lines = new ArrayList<>(buffer);
-        lines.replaceAll(s -> String.format("│%-121s│", s));
+        lines.replaceAll(s -> String.format("│%-101s│", s));
 
         // Pad the end of the lines
         for (int i = lines.size(); i < MAX_BUFFER_SIZE; i++)
@@ -148,15 +201,10 @@ public class Display {
     private ArrayList<String> renderRoom() {
         ArrayList<String> lines = new ArrayList<>();
 
-        lines.add(String.format("│%-29s│", "player: "));
-        lines.add(String.format("│%-29s│", " - health: " + Main.player.health));
-        lines.add(String.format("│%-29s│", " - damage: " + Main.player.damage));
-
         ArrayList<Enemy> enemies = Main.game.grid[Main.game.yPos][Main.game.xPos].enemies;
         for (int i = 0; i < enemies.size(); i++) {
+            lines.add(String.format("│%-29s│", enemies.get(i).name + ": " + generateBar(enemies.get(i).health, enemies.get(i).maxHealth) + " " +  enemies.get(i).health));
             lines.add(ROOM_PADDING);
-            lines.add(String.format("│%-29s│", enemies.get(i).name + ":"));
-            lines.add(String.format("│%-29s│", " - health: " + enemies.get(i).health));
         }
 
         // Pad the end of the lines
@@ -165,6 +213,17 @@ public class Display {
 
         lines.addFirst(ROOM_HEADER);
         lines.addLast(ROOM_FOOTER);
+        return lines;
+    }
+
+    private ArrayList<String> renderStats(){
+        ArrayList<String> lines = new ArrayList<>();
+
+        lines.add(String.format("│Health: %-41s│",
+                generateBar(Main.player.health, Main.player.maxHealth) + " " + Main.player.health
+        ));
+        lines.addFirst(STATS_HEADER);
+        lines.addLast(STATS_FOOTER);
         return lines;
     }
 
@@ -186,5 +245,12 @@ public class Display {
 
     public void close() {
         this.input.close();
+    }
+
+    private String generateBar(int value, int max){
+        final int BAR_LENGTH = 15;
+        int fill = Math.round((float) BAR_LENGTH * (Main.player.health) /Main.player.maxHealth);
+        int blank = BAR_LENGTH - fill;
+        return "[" + "■".repeat(fill) + "□".repeat(blank) + "]";
     }
 }

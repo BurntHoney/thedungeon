@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 public class Player {
     public String name;
+    public int maxHealth = 10;
     public int health = 10;
     public int damage = 4;
 
