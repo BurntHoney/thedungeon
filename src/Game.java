@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 public class Game {
@@ -14,11 +13,33 @@ public class Game {
     Game() {
 
         Random rand = new Random();
+
+        // Enemies
+
+        Enemy bat = new Enemy("bat", 6, 1);
+        bat.inventory.add("lesser_potion");
+
+        Enemy goblin = new Enemy("goblin", 10, 2);
+        goblin.inventory.add("greater_potion");
+
+        Enemy skeleton = new Enemy("skeleton", 15, 3);
+        skeleton.inventory.add("milk");
+
+        Enemy giantSkeleton = new Enemy("Giant Skeleton", 20, 5);
+        giantSkeleton.inventory.add("supreme_milk");
+
+        Enemy minotaur = new Enemy("minotaur", 5, 1);
+        minotaur.inventory.add("door_key");
+
+        Enemy dragon = new Enemy("dragon", 8, 1);
+        dragon.inventory.add("exit_key");
+
+
         // Initialize Room
         this.grid = new Room[5][5];
 
         grid[0][0] = new Room(" ");
-        grid[0][0].enemies.add(new Enemy("Bat", rand.nextInt(1, 5), rand.nextInt(1, 5)));
+        grid[0][0].enemies.add(bat);
 
         grid[0][1] = new Room(" ");
         grid[0][2] = new Room(" ");
@@ -31,10 +52,7 @@ public class Game {
         grid[1][3] = new Room("w");
 
         grid[1][4] = new Room("m");
-
-        Enemy miniboss = new Enemy("Giant Skeleton", 8, 2, "yippee freedom");
-        miniboss.inventory.add("door_key");
-        grid[1][4].enemies.add(miniboss);
+        grid[1][4].enemies.add(minotaur);
 
         grid[2][0] = new Room(" ");
         grid[2][1] = new Room("w");
@@ -48,9 +66,7 @@ public class Game {
         grid[3][3] = new Room(" ");
 
         grid[3][4] = new Room("b");
-        Enemy boss = new Enemy("Minotaur", 8, 2, "ahhhhhh!!!!!!");
-        boss.inventory.add("exit_key");
-        grid[3][4].enemies.add(boss);
+        grid[3][4].enemies.add(dragon);
 
         grid[4][0] = new Room("t");
         grid[4][1] = new Room(" ");
@@ -119,6 +135,12 @@ public class Game {
                     return false;
                 }
                 return attack(grid[yPos][xPos].enemies, args[1]);
+            case "use":
+                if(args.length == 1) {
+                    Main.display.printLine("system", "item not provided");
+                    return false;
+                }
+                return Main.player.useItem(args[1]);
             default:
                 Main.display.printLine("system", "invalid command");
                 return false;

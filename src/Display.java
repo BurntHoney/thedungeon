@@ -7,7 +7,7 @@ public class Display {
 
     private final ArrayList<String> buffer = new ArrayList<>(MAX_BUFFER_SIZE);
 
-    static final String DUNGEON_HEADER = "┌" + "─".repeat(87) + "TheDungeon" + "─".repeat(88) +"┐";;
+    static final String DUNGEON_HEADER = "┌" + "─".repeat(87) + "TheDungeon" + "─".repeat(88) +"┐";
     static final String DUNGEON_FOOTER = "└" + "─".repeat(185) + "┘";
 
     static final String COMMANDS_HEADER  = "┌─────────────────────Commands────────────────────┐";
@@ -118,23 +118,6 @@ public class Display {
 
         lines.add("│└─────┴─────┴─────┴─────┴─────┘└────────────────┘│");
         lines.add("└─────────────────────────────────────────────────┘");
-//
-//        for (int y = 0; y < 5; y++) {
-//            lines.add(String.format(
-//                    "│  %s  │  %s  │  %s  │  %s  │  %s  │",
-//                    mapCodes.get(5 * y),
-//                    mapCodes.get(5 * y + 1),
-//                    mapCodes.get(5 * y + 2),
-//                    mapCodes.get(5 * y + 3),
-//                    mapCodes.get(5 * y + 4)
-//            ));
-//            lines.add(MAP_CENTER);
-//        }
-//
-//        // Get rid of the last map center
-//        lines.removeLast();
-//        lines.addFirst(MAP_HEADER);
-//        lines.addLast(MAP_FOOTER);
 
         return lines;
     }
@@ -203,7 +186,9 @@ public class Display {
 
         ArrayList<Enemy> enemies = Main.game.grid[Main.game.yPos][Main.game.xPos].enemies;
         for (int i = 0; i < enemies.size(); i++) {
-            lines.add(String.format("│%-29s│", enemies.get(i).name + ": " + generateBar(enemies.get(i).health, enemies.get(i).maxHealth) + " " +  enemies.get(i).health));
+            lines.add(String.format("│%-29s│", "[" + i + "] " + enemies.get(i).name + ": "));
+            lines.add(String.format("│%-29s│", generateBar(enemies.get(i).health, enemies.get(i).maxHealth) + " " +  enemies.get(i).health));
+            lines.add(String.format("│%-29s│", " - rewards: " + enemies.get(i).inventory.toString()));
             lines.add(ROOM_PADDING);
         }
 
@@ -248,8 +233,8 @@ public class Display {
     }
 
     private String generateBar(int value, int max){
-        final int BAR_LENGTH = 15;
-        int fill = Math.round((float) BAR_LENGTH * (Main.player.health) /Main.player.maxHealth);
+        final int BAR_LENGTH = 20;
+        int fill = Math.round((float) (BAR_LENGTH * value) /max);
         int blank = BAR_LENGTH - fill;
         return "[" + "■".repeat(fill) + "□".repeat(blank) + "]";
     }
