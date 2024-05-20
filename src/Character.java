@@ -1,5 +1,3 @@
-import java.rmi.dgc.DGC;
-
 public class Character {
     private String name;
 

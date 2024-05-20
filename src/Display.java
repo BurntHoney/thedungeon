@@ -8,30 +8,31 @@ public class Display {
     private final ArrayList<String> buffer = new ArrayList<>(MAX_BUFFER_SIZE);
     public final Console console = new Console(42);
 
-    static final String DUNGEON_HEADER = "┌" + "─".repeat(87) + "TheDungeon" + "─".repeat(88) +"┐";
+    static final String DUNGEON_HEADER = "┌" + "─".repeat(87) + "TheDungeon" + "─".repeat(88) + "┐";
     static final String DUNGEON_FOOTER = "└" + "─".repeat(185) + "┘";
 
-    static final String COMMANDS_HEADER  = "┌─────────────────────Commands────────────────────┐";
-    static final String COMMANDS_FOOTER  = "└─────────────────────────────────────────────────┘";
+    static final String COMMANDS_HEADER = "┌─────────────────────Commands────────────────────┐";
+    static final String COMMANDS_FOOTER = "└─────────────────────────────────────────────────┘";
 
-    static final String STATS_HEADER  = "┌────────────────────────Stats────────────────────┐";
-    static final String STATS_FOOTER  = "└─────────────────────────────────────────────────┘";
+    static final String STATS_HEADER = "┌────────────────────────Stats────────────────────┐";
+    static final String STATS_FOOTER = "└─────────────────────────────────────────────────┘";
 
-    static final String INVENTORY_HEADER  = "┌─────────────────────Inventory───────────────────┐";
+    static final String INVENTORY_HEADER = "┌─────────────────────Inventory───────────────────┐";
     static final String INVENTORY_PADDING = "│                                                 │";
-    static final String INVENTORY_FOOTER  = "└─────────────────────────────────────────────────┘";
+    static final String INVENTORY_FOOTER = "└─────────────────────────────────────────────────┘";
 
     // Too large so we generate it at the start and leave it
     static final String CONSOLE_HEADER = "┌" + "─".repeat(101) + "┐";
     static final String CONSOLE_FOOTER = "└" + "─".repeat(101) + "┘";
     static final String CONSOLE_PADDING = "│" + " ".repeat(101) + "│";
 
-    static final String ROOM_HEADER  = "┌─────────────Room────────────┐";
+    static final String ROOM_HEADER = "┌─────────────Room────────────┐";
     static final String ROOM_PADDING = "│                             │";
-    static final String ROOM_FOOTER  = "└─────────────────────────────┘";
+    static final String ROOM_FOOTER = "└─────────────────────────────┘";
 
     public void display() {
-        // clear terminal: source: https://www.javatpoint.com/how-to-clear-screen-in-java
+        // clear terminal: source:
+        // https://www.javatpoint.com/how-to-clear-screen-in-java
         System.out.print("\033[H\033[2J");
         System.out.flush();
 
@@ -76,8 +77,7 @@ public class Display {
                 mapCodes.get(1),
                 mapCodes.get(2),
                 mapCodes.get(3),
-                mapCodes.get(4)
-        ));
+                mapCodes.get(4)));
 
         lines.add("│├─────┼─────┼─────┼─────┼─────┤│ w = wall       ││");
         lines.add(String.format("││  %s  │  %s  │  %s  │  %s  │  %s  ││ l = locked     ││",
@@ -85,8 +85,7 @@ public class Display {
                 mapCodes.get(6),
                 mapCodes.get(7),
                 mapCodes.get(8),
-                mapCodes.get(9)
-        ));
+                mapCodes.get(9)));
 
         lines.add("│├─────┼─────┼─────┼─────┼─────┤│ t = treasure   ││");
         lines.add(String.format("││  %s  │  %s  │  %s  │  %s  │  %s  ││ m = mini boss  ││",
@@ -94,8 +93,7 @@ public class Display {
                 mapCodes.get(11),
                 mapCodes.get(12),
                 mapCodes.get(13),
-                mapCodes.get(14)
-        ));
+                mapCodes.get(14)));
 
         lines.add("│├─────┼─────┼─────┼─────┼─────┤│ b = boss       ││");
         lines.add(String.format("││  %s  │  %s  │  %s  │  %s  │  %s  ││                ││",
@@ -103,8 +101,7 @@ public class Display {
                 mapCodes.get(16),
                 mapCodes.get(17),
                 mapCodes.get(18),
-                mapCodes.get(19)
-        ));
+                mapCodes.get(19)));
 
         lines.add("│├─────┼─────┼─────┼─────┼─────┤│                ││");
         lines.add(String.format("││  %s  │  %s  │  %s  │  %s  │  %s  ││                ││",
@@ -112,8 +109,7 @@ public class Display {
                 mapCodes.get(21),
                 mapCodes.get(22),
                 mapCodes.get(23),
-                mapCodes.get(24)
-        ));
+                mapCodes.get(24)));
 
         lines.add("│└─────┴─────┴─────┴─────┴─────┘└────────────────┘│");
         lines.add("└─────────────────────────────────────────────────┘");
@@ -140,7 +136,7 @@ public class Display {
         ArrayList<String> items = new ArrayList<>();
         ArrayList<Integer> count = new ArrayList<>();
         for (String item : Main.player.inventory) {
-            if(items.contains(item)) {
+            if (items.contains(item)) {
                 int index = items.indexOf(item);
                 count.set(index, count.get(index) + 1);
                 continue;
@@ -155,7 +151,6 @@ public class Display {
             lines.add(String.format("│ - %-46s│", items.get(i) + " x" + count.get(i)));
         }
 
-
         // Padding
         for (int i = lines.size(); i < 19; i++)
             lines.add(INVENTORY_PADDING);
@@ -165,7 +160,7 @@ public class Display {
         return lines;
     }
 
-    private ArrayList<String> renderConsole() {
+    public ArrayList<String> renderConsole() {
         ArrayList<String> lines = new ArrayList<>(buffer);
         lines.replaceAll(s -> String.format("│%-101s│", s));
 
@@ -184,7 +179,7 @@ public class Display {
         for (int i = 0; i < enemies.size(); i++) {
             Enemy enemy = enemies.get(i);
             lines.add(String.format("│%-29s│", "[" + i + "] " + enemy.name + ": "));
-            lines.add(String.format("│%-29s│", generateBar(enemy.health, enemy.maxHealth) + " " +  enemy.health));
+            lines.add(String.format("│%-29s│", generateBar(enemy.health, enemy.maxHealth) + " " + enemy.health));
             lines.add(String.format("│%-29s│", " - rewards: " + enemy.inventory.toString()));
             lines.add(ROOM_PADDING);
         }
@@ -197,17 +192,15 @@ public class Display {
         return lines;
     }
 
-    private ArrayList<String> renderStats(){
+    private ArrayList<String> renderStats() {
         ArrayList<String> lines = new ArrayList<>();
 
         lines.add(String.format("│Health: %-41s│",
-                generateBar(Main.player.health, Main.player.maxHealth) + " " + Main.player.health
-        ));
+                generateBar(Main.player.health, Main.player.maxHealth) + " " + Main.player.health));
         lines.addFirst(STATS_HEADER);
         lines.addLast(STATS_FOOTER);
         return lines;
     }
-
 
     public void printLine(String source, String text) {
         buffer.add(String.format("[%s]: %s", source, text));
@@ -228,9 +221,9 @@ public class Display {
         this.input.close();
     }
 
-    private String generateBar(int value, int max){
+    private String generateBar(int value, int max) {
         final int BAR_LENGTH = 20;
-        int fill = Math.round((float) (BAR_LENGTH * value) /max);
+        int fill = Math.round((float) (BAR_LENGTH * value) / max);
         int blank = BAR_LENGTH - fill;
         return "[" + "■".repeat(fill) + "□".repeat(blank) + "]";
     }
