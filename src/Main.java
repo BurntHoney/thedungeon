@@ -4,12 +4,12 @@ public class Main {
     public static Player player = new Player();
 
     public static void main(String[] args) {
-        // Get Player Name
-        display.printLine("system","What is your name?");
+        Main.display.console.log("system", "What is your name?", "info");
+        Main.display.display();
 
         String playerName = display.readLine("Name: ");
-        display.printLine("player", playerName);
-        display.printLine("system", String.format("welcome to the dungeon %s", playerName));
+        Main.display.console.log("player", playerName, "spam");
+        Main.display.console.log("system", String.format("welcome to the dungeon %s", playerName), "info");
 
         // Game Loop
         while (!game.getGameOver()){

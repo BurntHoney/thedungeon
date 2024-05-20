@@ -6,6 +6,7 @@ public class Display {
     private final Scanner input = new Scanner(System.in);
 
     private final ArrayList<String> buffer = new ArrayList<>(MAX_BUFFER_SIZE);
+    public final Console console = new Console(42);
 
     static final String DUNGEON_HEADER = "┌" + "─".repeat(87) + "TheDungeon" + "─".repeat(88) +"┐";
     static final String DUNGEON_FOOTER = "└" + "─".repeat(185) + "┘";
@@ -43,7 +44,8 @@ public class Display {
         infoColumn.addAll(renderStats());
         infoColumn.addAll(renderInventory());
 
-        ArrayList<String> consoleColumn = renderConsole();
+        // ArrayList<String> consoleColumn = renderConsole();
+        ArrayList<String> consoleColumn = this.console.render();
         ArrayList<String> roomColumn = renderRoom();
 
         // Print Component's Line By Line
@@ -66,7 +68,6 @@ public class Display {
         mapCodes.set(Main.game.yPos * 5 + Main.game.xPos, "x");
 
         ArrayList<String> lines = new ArrayList<>();
-
         lines.add("┌────────────────────────Map──────────────────────┐");
         lines.add("│┌─────┬─────┬─────┬─────┬─────┐┌─────Legend─────┐│");
 
@@ -79,7 +80,6 @@ public class Display {
         ));
 
         lines.add("│├─────┼─────┼─────┼─────┼─────┤│ w = wall       ││");
-
         lines.add(String.format("││  %s  │  %s  │  %s  │  %s  │  %s  ││ l = locked     ││",
                 mapCodes.get(5),
                 mapCodes.get(6),
@@ -87,6 +87,7 @@ public class Display {
                 mapCodes.get(8),
                 mapCodes.get(9)
         ));
+
         lines.add("│├─────┼─────┼─────┼─────┼─────┤│ t = treasure   ││");
         lines.add(String.format("││  %s  │  %s  │  %s  │  %s  │  %s  ││ m = mini boss  ││",
                 mapCodes.get(10),
@@ -97,7 +98,6 @@ public class Display {
         ));
 
         lines.add("│├─────┼─────┼─────┼─────┼─────┤│ b = boss       ││");
-
         lines.add(String.format("││  %s  │  %s  │  %s  │  %s  │  %s  ││                ││",
                 mapCodes.get(15),
                 mapCodes.get(16),
@@ -107,7 +107,6 @@ public class Display {
         ));
 
         lines.add("│├─────┼─────┼─────┼─────┼─────┤│                ││");
-
         lines.add(String.format("││  %s  │  %s  │  %s  │  %s  │  %s  ││                ││",
                 mapCodes.get(20),
                 mapCodes.get(21),
@@ -140,10 +139,8 @@ public class Display {
     private ArrayList<String> renderInventory() {
         ArrayList<String> items = new ArrayList<>();
         ArrayList<Integer> count = new ArrayList<>();
-
-        for (int i = 0; i < Main.player.inventory.size(); i++) {
-            String item = Main.player.inventory.get(i);
-            if (items.contains(item)){
+        for (String item : Main.player.inventory) {
+            if(items.contains(item)) {
                 int index = items.indexOf(item);
                 count.set(index, count.get(index) + 1);
                 continue;
@@ -172,7 +169,6 @@ public class Display {
         ArrayList<String> lines = new ArrayList<>(buffer);
         lines.replaceAll(s -> String.format("│%-101s│", s));
 
-        // Pad the end of the lines
         for (int i = lines.size(); i < MAX_BUFFER_SIZE; i++)
             lines.add(CONSOLE_PADDING);
 
@@ -186,13 +182,13 @@ public class Display {
 
         ArrayList<Enemy> enemies = Main.game.grid[Main.game.yPos][Main.game.xPos].enemies;
         for (int i = 0; i < enemies.size(); i++) {
-            lines.add(String.format("│%-29s│", "[" + i + "] " + enemies.get(i).name + ": "));
-            lines.add(String.format("│%-29s│", generateBar(enemies.get(i).health, enemies.get(i).maxHealth) + " " +  enemies.get(i).health));
-            lines.add(String.format("│%-29s│", " - rewards: " + enemies.get(i).inventory.toString()));
+            Enemy enemy = enemies.get(i);
+            lines.add(String.format("│%-29s│", "[" + i + "] " + enemy.name + ": "));
+            lines.add(String.format("│%-29s│", generateBar(enemy.health, enemy.maxHealth) + " " +  enemy.health));
+            lines.add(String.format("│%-29s│", " - rewards: " + enemy.inventory.toString()));
             lines.add(ROOM_PADDING);
         }
 
-        // Pad the end of the lines
         for (int i = lines.size(); i < MAX_BUFFER_SIZE; i++)
             lines.add(ROOM_PADDING);
 

@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Game {
     private boolean gameOver = false;
@@ -12,7 +11,6 @@ public class Game {
 
     Game() {
 
-        Random rand = new Random();
 
         // Enemies
 
@@ -84,7 +82,7 @@ public class Game {
     public void gameLoop() {
         // Get Input from user
         String input = Main.display.readLine("Command: ");
-        Main.display.printLine("player", input);
+        Main.display.console.log("player", input, "spam");
 
         boolean success = routeCommand(input);
         if (!success) return; // Let the player retype the command on failure
@@ -95,7 +93,7 @@ public class Game {
 
         if(!enemies.isEmpty() && !inBattle) {
             inBattle = true;
-            Main.display.printLine("system", "you encounter some enemies");
+            Main.display.console.log("system", "you encounter some enemies", "info");
         } else {
             for (int i = 0; i < enemies.size(); i++) {
                 Enemy enemy = enemies.get(i);
@@ -104,14 +102,14 @@ public class Game {
 
             // End Game if player is dead
             if (Main.player.health == 0) {
-                Main.display.printLine("system", "You have died");
+                Main.display.console.log("system", "you have died", "error");
                 gameOver = true;
             }
         }
 
         // Check if the win condition is met
         if(xPos == 4 && yPos == 4) {
-            Main.display.printLine("system", "You have finally escaped the dungeon :)");
+            Main.display.console.log("system", "you have finally escaped the dungeon", "info");
             gameOver = true;
         }
     }
@@ -122,7 +120,7 @@ public class Game {
         switch (args[0]) {
             case "move":
                 if(args.length == 1) {
-                    Main.display.printLine("system", "direction not provided");
+                    Main.display.console.log("system", "direction not provided", "error");
                     return false;
                 }
                 return move(args[1]);
@@ -131,72 +129,72 @@ public class Game {
                 return true;
             case "attack":
                 if(args.length == 1) {
-                    Main.display.printLine("system", "target not provided");
+                    Main.display.console.log("system", "target not provided", "error");
                     return false;
                 }
                 return attack(grid[yPos][xPos].enemies, args[1]);
             case "use":
                 if(args.length == 1) {
-                    Main.display.printLine("system", "item not provided");
+                    Main.display.console.log("system", "item not provided", "error");
                     return false;
                 }
                 return Main.player.useItem(args[1]);
             default:
-                Main.display.printLine("system", "invalid command");
+                Main.display.console.log("system", "invalid command", "error");
                 return false;
         }
     }
 
     private boolean move(String direction) {
         if(inBattle) {
-            Main.display.printLine("system", "you cannot flee from battle");
+            Main.display.console.log("system", "you cannot flee from battle", "error");
             return false;
         }
 
         int offsetX = 0;
         int offsetY = 0;
         switch (direction) {
-            case "r":
+            case "e":
                 offsetX += 1;
                 break;
-            case "l":
+            case "w":
                 offsetX -= 1;
                 break;
-            case "u":
+            case "n":
                 offsetY -= 1;
                 break;
-            case "d":
+            case "s":
                 offsetY += 1;
                 break;
             default:
-                Main.display.printLine("system", "invalid direction");
+                Main.display.console.log("system", "invalid direction", "error");
                 return false;
         }
 
         // Make sure the player is in bounds
         if (xPos + offsetX > 4 || xPos + offsetX < 0) {
-            Main.display.printLine("system", "error out of bounds");
+            Main.display.console.log("system", "error out of bounds", "error");
             return false;
         }
 
         if (yPos + offsetY > 4 || yPos + offsetY < 0) {
-            Main.display.printLine("system", "error out of bounds");
+            Main.display.console.log("system", "error out of bounds", "error");
             return false;
         }
 
         Room currentRoom = grid[yPos + offsetY][xPos + offsetX];
         switch (currentRoom.code) {
             case "w":
-                Main.display.printLine("system", "there is a wall there");
+                Main.display.console.log("system", "there is a wall there", "error");
                 return false;
             case "l":
                 // Try to unlock the room
                 currentRoom.unlock(Main.player.inventory);
                 if(currentRoom.isLocked()) {
-                    Main.display.printLine("system", "that room is currently locked");
+                    Main.display.console.log("system", "that room is currently locked", "warning");
                     return false;
                 }
-                Main.display.printLine("system", "you unlock the room");
+                Main.display.console.log("system", "you unlock the room", "info");
                 break;
         }
         xPos += offsetX;
@@ -214,21 +212,23 @@ public class Game {
         }
 
         if (target == null) {
-            Main.display.printLine("system", "invalid target");
+            Main.display.console.log("system", "invalid target", "error");
             return false;
         }
 
 
         target.takeDamage(Main.player.damage);
-        Main.display.printLine(
+
+        Main.display.console.log(
                 "system",
-                String.format("the %s has taken %d damage", target.name, Main.player.damage)
+                String.format("the %s has taken %d damage", target.name, Main.player.damage),
+                "info"
         );
 
         if (target.health == 0) {
             Main.player.inventory.addAll(target.inventory);
             enemies.remove(target);
-            Main.display.printLine("system", String.format("the %s has died", targetName));
+            Main.display.console.log("system", String.format("the %s has died", targetName), "info");
 
             // If the current room is a boss room we mark the room as cleared
             grid[yPos][xPos].code = " ";
