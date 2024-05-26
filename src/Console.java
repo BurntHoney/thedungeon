@@ -24,15 +24,15 @@ public class Console {
     private String convertLogLevel(String level) {
         switch (level) {
             case "info":
-                return Color.GREEN;
+                return TerminalColor.GREEN;
             case "error":
-                return Color.RED;
+                return TerminalColor.RED;
             case "warning":
-                return Color.YELLOW;
+                return TerminalColor.YELLOW;
             case "spam":
-                return Color.CYAN;
+                return TerminalColor.CYAN;
             default:
-                return Color.WHITE;
+                return TerminalColor.WHITE;
         }
     }
 
@@ -42,15 +42,14 @@ public class Console {
         lines.add(CONSOLE_HEADER);
         for (Record record : this.buffer) {
             lines.add(
-                "│" +
-                convertLogLevel(record.level) +
-                String.format(
-                    "%-101s",
-                    "[" + record.source + "]: " + record.message
-                ) +
-                Color.RESET +
-                "│"
-            );
+                    "│" +
+                            convertLogLevel(record.level) +
+                            String.format(
+                                    "%-101s",
+                                    "[" + record.source + "]: " + record.message)
+                            +
+                            TerminalColor.RESET +
+                            "│");
         }
 
         // Pad console

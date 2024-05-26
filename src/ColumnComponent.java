@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 
 public class ColumnComponent {
-    Component[] component;
-
     Component[] children;
     ColumnComponent[] columnChildren;
     RowComponent[] rowChildren;
@@ -110,12 +108,10 @@ public class ColumnComponent {
         component.setBorder(true);
         component.setFixedDimension(this.fixedWidth, this.fixedHeight);
 
-        if (this.hasBorder) {
-            this.setBorders(true);
-        }
-
         int flexibleComponents = 0;
-        int freeSpace = height - 2;
+        int freeSpace = height;
+        if (this.hasBorder)
+            freeSpace -= 1;
         for (Component child : this.children) {
             int[] dimensions = child.calculateDimensions();
             if (dimensions[3] == -1)
@@ -133,7 +129,9 @@ public class ColumnComponent {
                 int[] dimension = child.calculateDimensions();
                 int componentWidth = dimension[0];
                 if (dimension[1] == -1) {
-                    componentWidth = width - 2;
+                    componentWidth = width;
+                    if (this.hasBorder)
+                        componentWidth -= 2;
                 }
 
                 int componentHeight = dimension[2];
@@ -144,7 +142,6 @@ public class ColumnComponent {
                     }
                     flexibleComponents -= 1;
                 }
-                System.out.println(componentWidth);
                 component.batchWriteBuffer(child.constructComponent(componentWidth, componentHeight));
             }
         }

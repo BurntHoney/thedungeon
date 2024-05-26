@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Character {
     private String name;
 
@@ -6,14 +8,19 @@ public class Character {
     private int defence;
     private int damage;
 
-    Item[] inventory;
+    ArrayList<Item> inventory = new ArrayList<Item>();
+
+    /**
+     * Set the name of the character
+     * 
+     * @param name the name of the character to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getName() {
         return this.name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public int getHealth(int health) {
@@ -30,7 +37,7 @@ public class Character {
     }
 
     public void setDamage(int damage) {
-        damage += damage;
+        this.damage = damage;
     }
 
     public void takeDamage(int damage) {

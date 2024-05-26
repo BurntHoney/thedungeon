@@ -6,9 +6,11 @@ public class Component {
     private String title;
 
     // Dimensions
+    private int maxHeight = -1;
+    private int maxWidth = -1;
     private boolean fixedWidth = false;
     private boolean fixedHeight = false;
-    private boolean hasBorder = true;
+    private boolean hasBorder = false;
 
     // Display Buffer
     private ArrayList<String> buffer = new ArrayList<String>(0);
@@ -20,6 +22,14 @@ public class Component {
     public void setFixedDimension(boolean fixedWidth, boolean fixedHeight) {
         this.fixedWidth = fixedWidth;
         this.fixedHeight = fixedHeight;
+    }
+
+    public void setMaxHeight(int height) {
+        this.maxHeight = height;
+    }
+
+    public void setMaxWidth(int width) {
+        this.maxWidth = width;
     }
 
     public void setBorder(boolean hasBorder) {

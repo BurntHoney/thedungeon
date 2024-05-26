@@ -3,39 +3,24 @@ public class Main {
     public static Game game = new Game();
     public static Player player = new Player();
 
+    public static Character player2;
+
+    // Enemies
+    public static Character dragon;
+    public static Character minotaur;
+
+    // Component's
+    public static MapComponent mapComponent = new MapComponent();
+
     public static void main(String[] args) {
-        Component map = new Component();
-        map.setTitle("map");
-        map.setBorder(true);
-
-        map.writeBuffer("command");
-        map.writeBuffer("more");
-        map.writeBuffer("something");
-
-        Component inventory = new Component();
-        inventory.setTitle("inventory is the best");
-        inventory.setBorder(true);
-        inventory.writeBuffer("potion x2");
-        inventory.writeBuffer("bone x3");
-
-        Component inventory2 = new Component();
-        inventory2.setTitle("inventory is the west");
-        inventory2.setBorder(true);
-        inventory2.setFixedDimension(false, true);
-        inventory2.writeBuffer("potion x2");
-        inventory2.writeBuffer("bone x3");
-        inventory2.writeBuffer("line");
-
-        ColumnComponent column = new ColumnComponent(new Component[] { map, inventory, inventory2 });
-        column.setTitle("column1");
-        column.setBorders(true);
-
-        int[] dimensions = column.calculateDimensions();
-        System.out.printf("%d %d %d %d\n", dimensions[0], dimensions[1], dimensions[2], dimensions[3]);
-        for (String line : column.constructComponent(100, 40)) {
+        RowComponent map = mapComponent.getComponent();
+        int[] dimentions = map.calculateDimensions();
+        var test = map.constructComponent(dimentions[0], dimentions[2]);
+        for (String line : test) {
             System.out.println(line);
         }
 
+        // player2 = new Character();
         // Main.display.console.log("system", "What is your name?", "info");
         // Main.display.display();
 
