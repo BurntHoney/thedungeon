@@ -7,8 +7,7 @@ public class RowComponent {
 
     String title;
     boolean hasBorder = false;
-    boolean fixedWidth;
-    boolean fixedHeight;
+    Dimension dimension = new Dimension();
 
     RowComponent(Component[] children) {
         this.children = children;
@@ -30,9 +29,12 @@ public class RowComponent {
         this.hasBorder = hasBorder;
     }
 
-    public void setFixedDimension(boolean fixedWidth, boolean fixedHeight) {
-        this.fixedWidth = fixedWidth;
-        this.fixedHeight = fixedHeight;
+    public void setFixedWidth(boolean fixed) {
+        this.dimension.fixedWidth = fixed;
+    }
+
+    public void setFixedHeight(boolean fixed) {
+        this.dimension.fixedHeight = fixed;
     }
 
     int[] calculateDimensions() {

@@ -20,17 +20,19 @@ class MapComponent {
         this.legendComponent.writeBuffer(" b = boss");
 
         this.minimapComponent = new Component();
-        this.minimapComponent.setFixedDimension(true, true);
+        this.minimapComponent.setFixedWidth(true);
+        this.minimapComponent.setFixedHeight(true);
 
         // Initialize the parent component
         this.mapComponent = new RowComponent(new Component[] { this.minimapComponent, this.legendComponent });
         this.mapComponent.setTitle("Map");
         this.mapComponent.setBorders(true);
-        this.mapComponent.setFixedDimension(true, true);
+        this.mapComponent.setFixedWidth(true);
+        this.mapComponent.setFixedHeight(true);
     }
 
     public RowComponent getComponent() {
-        this.minimapComponent.flush();
+        this.minimapComponent.clear();
 
         // update map component with the player position
         ArrayList<String> mapCodes = new ArrayList<>(25);
