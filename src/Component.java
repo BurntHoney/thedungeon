@@ -107,7 +107,7 @@ public class Component {
 
         for (Component child : this.children) {
             Dimension childDimension = child.computeDimension();
-            if (child.fixedHeight)
+            if (!child.fixedHeight)
                 flexibleComponents += 1;
             flexibleSpace -= childDimension.minHeight;
         }
@@ -136,7 +136,7 @@ public class Component {
 
             // Calculate the best height for the component
             int componentHeight = childDimension.minHeight;
-            if (childDimension.fixedWidth) {
+            if (!childDimension.fixedHeight) {
                 componentHeight += padding;
                 if (flexibleComponents <= extra)
                     componentHeight++;
@@ -152,7 +152,7 @@ public class Component {
         int flexibleSpace = width;
         for (Component child : this.children) {
             Dimension childDimension = child.computeDimension();
-            if (child.fixedWidth)
+            if (!child.fixedWidth)
                 flexibleComponents += 1;
             flexibleSpace -= childDimension.minWidth;
         }
@@ -232,7 +232,8 @@ public class Component {
                     try {
                         drawBuffer.add(formatString.formatted(line.substring(j * width, (j + 1) * width)));
                     } catch (StringIndexOutOfBoundsException e) {
-                        drawBuffer.add(formatString.formatted(line.substring(j * width)));
+                        String something = formatString.formatted(line.substring(j * width));
+                        drawBuffer.add(something);
                     }
                 }
             } else

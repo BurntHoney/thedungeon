@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 
 public class Main {
     public static Dungeon dungeon = new Dungeon();
@@ -13,6 +12,7 @@ public class Main {
     public static MapComponent mapComponent = new MapComponent();
     public static CommandsComponent commandsComponent = new CommandsComponent();
     public static InventoryComponent inventoryComponent = new InventoryComponent();
+    public static ConsoleComponent consoleComponent = new ConsoleComponent();
 
     public static void main(String[] args) {
 
@@ -36,18 +36,31 @@ public class Main {
         player.inventory.add(new Item("health potion"));
         player.inventory.add(new Item("health potion"));
 
+        Component window = new Component();
+        window.setTitle("TheDungeon");
+        window.setFixedWidth();
+        window.setFixedHeight();
+        window.setMinWidth(150);
+        window.setMinHeight(30);
+        window.setBorder();
+        window.setRowComponent();
+
         Component component = new Component();
         component.setBorder();
         component.setColumnComponent();
+        component.setFixedWidth();
         component.addChild(mapComponent.getComponent());
         component.addChild(commandsComponent.getComponent());
         component.addChild(inventoryComponent.getComponent());
 
-        Dimension mapDimension = component.computeDimension();
-        System.out.println(mapDimension.minHeight);
-        System.out.println(mapDimension.minWidth);
+        window.addChild(component);
+        window.addChild(consoleComponent.getComponent());
+        consoleComponent.log("info", "system", "what is your name prisoner?");
+        consoleComponent.log("debug", "player", "the name's burnt honey");
 
-        for (String line : component.draw(mapDimension.minWidth, mapDimension.minHeight)) {
+        Dimension windowDimension = window.computeDimension();
+
+        for (String line : window.draw(windowDimension.minWidth, windowDimension.minHeight)) {
             System.out.println(line);
         }
     }
