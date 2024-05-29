@@ -3,18 +3,15 @@ import java.util.ArrayList;
 public class Character {
     private String name;
 
-    private int maxHealth;
-    private int currentHealth;
-    private int defence;
-    private int damage;
+    public int maxHealth = 10;
+    public int currentHealth = 10;
+    public int defence = 0;
+    public int damage = 1;
+
+    ArrayList<String> imageBuffer = new ArrayList<>();
 
     ArrayList<Item> inventory = new ArrayList<Item>();
 
-    /**
-     * Set the name of the character
-     * 
-     * @param name the name of the character to set
-     */
     public void setName(String name) {
         this.name = name;
     }

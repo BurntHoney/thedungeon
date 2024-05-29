@@ -1,5 +1,5 @@
-
 class ConsoleComponent {
+
     Component component;
 
     ConsoleComponent() {
@@ -12,7 +12,7 @@ class ConsoleComponent {
         return component;
     }
 
-    public void log(String level, String source, String message) {
-        this.component.writeBuffer(String.format("[%s] [%s] %s", level, source, message));
+    public void log(String source, String message) {
+        this.component.writeBuffer(String.format("[%s] %s", source, message));
     }
 }
