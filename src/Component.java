@@ -5,14 +5,29 @@ import java.util.ArrayList;
  * component
  */
 public class Component {
-
-    // Component Metadata
     private String title;
+
     private Dimension dimension = new Dimension();
+
+    private int width = 0;
+    private int minWidth = -1;
+    private int maxWidth = -1;
+
+    private int height = 0;
+    private int minHeight = -1;
+    private int maxheight = -1;
+
     private boolean hasBorder = false;
+    private boolean fixedHeight = false;
+    private boolean fixedWidth = false;
+
+    //
+    private boolean isRowComponenet = false;
+    private boolean isColumnComponent = false;
+    private ArrayList<Component> children = new ArrayList<Component>(0);
 
     // Display Buffer
-    private ArrayList<String> buffer = new ArrayList<String>(0);
+    private ArrayList<String> buffer = new ArrayList<String>();
 
     public void setTitle(String title) {
         this.title = title;
@@ -42,20 +57,50 @@ public class Component {
         this.dimension.maxHeight = height;
     }
 
-    public void setFixedWidth(boolean fixed) {
-        this.dimension.fixedWidth = fixed;
+    public void setFixedWidth() {
+        this.dimension.fixedWidth = true;
     }
 
-    public void setFixedHeight(boolean fixed) {
-        this.dimension.fixedHeight = fixed;
+    public void setFixedHeight() {
+        this.dimension.fixedHeight = true;
     }
 
-    public void setBorder(boolean hasBorder) {
-        this.hasBorder = hasBorder;
+    public void setBorder() {
+        this.hasBorder = true;
     }
 
     public boolean hasBorder() {
         return this.hasBorder;
+    }
+
+    public void setColumnComponent() {
+        this.isColumnComponent = true;
+        this.isRowComponenet = false;
+    }
+
+    public void setRowComponent() {
+        this.isRowComponenet = true;
+        this.isColumnComponent = false;
+    }
+
+    public void addChild(Component child) {
+        this.children.add(child);
+    }
+
+    public void rotateChildren() {
+        this.children.add(this.children.removeFirst());
+    }
+
+    public void writeBuffer(String line) {
+        buffer.add(line);
+    }
+
+    public void batchWriteBuffer(ArrayList<String> lines) {
+        buffer.addAll(lines);
+    }
+
+    public void clear() {
+        this.buffer.clear();
     }
 
     public ArrayList<String> constructComponent(int width, int height) {
@@ -216,15 +261,4 @@ public class Component {
         return dimensions;
     }
 
-    public void writeBuffer(String line) {
-        buffer.add(line);
-    }
-
-    public void batchWriteBuffer(ArrayList<String> lines) {
-        buffer.addAll(lines);
-    }
-
-    public void clear() {
-        this.buffer.clear();
-    }
 }

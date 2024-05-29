@@ -10,8 +10,6 @@ public class Game {
     public Room[][] grid;
 
     Game() {
-
-
         // Enemies
 
         Enemy bat = new Enemy("bat", 6, 1);
@@ -31,7 +29,6 @@ public class Game {
 
         Enemy dragon = new Enemy("dragon", 8, 1);
         dragon.inventory.add("exit_key");
-
 
         // Initialize Room
         this.grid = new Room[5][5];
@@ -71,7 +68,6 @@ public class Game {
         grid[4][2] = new Room(" ");
         grid[4][3] = new Room("w");
 
-
         grid[4][4] = new Room("l", "exit_key");
     }
 
@@ -85,13 +81,14 @@ public class Game {
         Main.display.console.log("player", input, "spam");
 
         boolean success = routeCommand(input);
-        if (!success) return; // Let the player retype the command on failure
+        if (!success)
+            return; // Let the player retype the command on failure
 
         // After Command Actions
         Room currentRoom = grid[yPos][xPos];
         ArrayList<Enemy> enemies = currentRoom.enemies;
 
-        if(!enemies.isEmpty() && !inBattle) {
+        if (!enemies.isEmpty() && !inBattle) {
             inBattle = true;
             Main.display.console.log("system", "you encounter some enemies", "info");
         } else {
@@ -108,7 +105,7 @@ public class Game {
         }
 
         // Check if the win condition is met
-        if(xPos == 4 && yPos == 4) {
+        if (xPos == 4 && yPos == 4) {
             Main.display.console.log("system", "you have finally escaped the dungeon", "info");
             gameOver = true;
         }
@@ -119,7 +116,7 @@ public class Game {
 
         switch (args[0]) {
             case "move":
-                if(args.length == 1) {
+                if (args.length == 1) {
                     Main.display.console.log("system", "direction not provided", "error");
                     return false;
                 }
@@ -128,13 +125,13 @@ public class Game {
                 gameOver = true;
                 return true;
             case "attack":
-                if(args.length == 1) {
+                if (args.length == 1) {
                     Main.display.console.log("system", "target not provided", "error");
                     return false;
                 }
                 return attack(grid[yPos][xPos].enemies, args[1]);
             case "use":
-                if(args.length == 1) {
+                if (args.length == 1) {
                     Main.display.console.log("system", "item not provided", "error");
                     return false;
                 }
@@ -146,7 +143,7 @@ public class Game {
     }
 
     private boolean move(String direction) {
-        if(inBattle) {
+        if (inBattle) {
             Main.display.console.log("system", "you cannot flee from battle", "error");
             return false;
         }
@@ -190,7 +187,7 @@ public class Game {
             case "l":
                 // Try to unlock the room
                 currentRoom.unlock(Main.player.inventory);
-                if(currentRoom.isLocked()) {
+                if (currentRoom.isLocked()) {
                     Main.display.console.log("system", "that room is currently locked", "warning");
                     return false;
                 }
@@ -216,14 +213,12 @@ public class Game {
             return false;
         }
 
-
         target.takeDamage(Main.player.damage);
 
         Main.display.console.log(
                 "system",
                 String.format("the %s has taken %d damage", target.name, Main.player.damage),
-                "info"
-        );
+                "info");
 
         if (target.health == 0) {
             Main.player.inventory.addAll(target.inventory);
