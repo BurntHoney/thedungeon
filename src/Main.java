@@ -1,9 +1,9 @@
-public class Main {
-    public static Display display = new Display();
-    public static Game game = new Game();
-    public static Player player = new Player();
+import java.util.ArrayList;
 
-    public static Character player2;
+public class Main {
+    public static Dungeon dungeon = new Dungeon();
+
+    public static Character player = new Character();
 
     // Enemies
     public static Character dragon;
@@ -11,6 +11,8 @@ public class Main {
 
     // Component's
     public static MapComponent mapComponent = new MapComponent();
+    public static CommandsComponent commandsComponent = new CommandsComponent();
+    public static InventoryComponent inventoryComponent = new InventoryComponent();
 
     public static void main(String[] args) {
 
@@ -31,17 +33,21 @@ public class Main {
 
         // display.close();
 
+        player.inventory.add(new Item("health potion"));
+        player.inventory.add(new Item("health potion"));
+
         Component component = new Component();
-        component.setTitle("wow");
         component.setBorder();
+        component.setColumnComponent();
+        component.addChild(mapComponent.getComponent());
+        component.addChild(commandsComponent.getComponent());
+        component.addChild(inventoryComponent.getComponent());
 
-        component.writeBuffer("hmmmm");
-        component.writeBuffer("asdfjaskdfjaslkdjf;laskjdfl;askjdf;laskdjfa;slkdfjasdlkf;j");
-        component.writeBuffer("asdfjaskdfjaslkdjf;laskjdfl;askjdf;laskdjfa;slkdfjasdlkf;j");
-        component.writeBuffer("asdfjaskdfjaslkdjf;laskjdfl;askjdf;laskdjfa;slkdfjasdlkf;j");
-        component.writeBuffer("woahhh");
+        Dimension mapDimension = component.computeDimension();
+        System.out.println(mapDimension.minHeight);
+        System.out.println(mapDimension.minWidth);
 
-        for (String line : component.draw(30, 7)) {
+        for (String line : component.draw(mapDimension.minWidth, mapDimension.minHeight)) {
             System.out.println(line);
         }
     }

@@ -3,7 +3,7 @@ import java.util.ArrayList;
 class MapComponent {
     Component legendComponent;
     Component minimapComponent;
-    RowComponent mapComponent;
+    Component mapComponent;
 
     MapComponent() {
         // Initialize Legend Component with
@@ -11,7 +11,6 @@ class MapComponent {
         this.legendComponent.setTitle("Legend");
         this.legendComponent.setBorder();
 
-        // Populate Legend
         this.legendComponent.writeBuffer(" x = player");
         this.legendComponent.writeBuffer(" w = wall");
         this.legendComponent.writeBuffer(" l = locked");
@@ -19,19 +18,23 @@ class MapComponent {
         this.legendComponent.writeBuffer(" m = miniboss");
         this.legendComponent.writeBuffer(" b = boss");
 
+        // Initialize Map Component
         this.minimapComponent = new Component();
         this.minimapComponent.setFixedWidth();
         this.minimapComponent.setFixedHeight();
 
         // Initialize the parent component
-        this.mapComponent = new RowComponent(new Component[] { this.minimapComponent, this.legendComponent });
+        this.mapComponent = new Component();
         this.mapComponent.setTitle("Map");
-        this.mapComponent.setBorders(true);
-        this.mapComponent.setFixedWidth(true);
-        this.mapComponent.setFixedHeight(true);
+        this.mapComponent.setBorder();
+        this.mapComponent.setFixedWidth();
+        this.mapComponent.setFixedHeight();
+        this.mapComponent.setRowComponent();
+        this.mapComponent.addChild(this.minimapComponent);
+        this.mapComponent.addChild(this.legendComponent);
     }
 
-    public RowComponent getComponent() {
+    public Component getComponent() {
         this.minimapComponent.clear();
 
         // update map component with the player position
@@ -39,9 +42,9 @@ class MapComponent {
 
         for (int y = 0; y < 5; y++)
             for (int x = 0; x < 5; x++)
-                mapCodes.add(Main.game.grid[y][x].code);
+                mapCodes.add(Main.dungeon.rooms[y][x].code);
 
-        mapCodes.set(Main.game.yPos * 5 + Main.game.xPos, "x");
+        mapCodes.set(Main.dungeon.yPos * 5 + Main.dungeon.xPos, "x");
 
         this.minimapComponent.writeBuffer("┌─────┬─────┬─────┬─────┬─────┐");
 
@@ -85,6 +88,7 @@ class MapComponent {
                 mapCodes.get(24)));
 
         this.minimapComponent.writeBuffer("└─────┴─────┴─────┴─────┴─────┘");
+
         return this.mapComponent;
     }
 }

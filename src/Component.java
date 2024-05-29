@@ -107,7 +107,7 @@ public class Component {
 
         for (Component child : this.children) {
             Dimension childDimension = child.computeDimension();
-            if (child.maxHeight == -1)
+            if (child.fixedHeight)
                 flexibleComponents += 1;
             flexibleSpace -= childDimension.minHeight;
         }
@@ -136,7 +136,7 @@ public class Component {
 
             // Calculate the best height for the component
             int componentHeight = childDimension.minHeight;
-            if (childDimension.maxHeight == -1) {
+            if (childDimension.fixedWidth) {
                 componentHeight += padding;
                 if (flexibleComponents <= extra)
                     componentHeight++;
@@ -146,9 +146,63 @@ public class Component {
         }
     }
 
-    private ArrayList<String> drawRowComponent(int width, int height) {
-        ArrayList<String> drawBuffer = new ArrayList<>(height);
-        return drawBuffer;
+    private void drawRowComponent(int width, int height) {
+        // Find the number of component's with free space
+        int flexibleComponents = 0;
+        int flexibleSpace = width;
+        for (Component child : this.children) {
+            Dimension childDimension = child.computeDimension();
+            if (child.fixedWidth)
+                flexibleComponents += 1;
+            flexibleSpace -= childDimension.minWidth;
+        }
+
+        // Prevent division by 0 errors
+        if (flexibleComponents == 0)
+            flexibleComponents = 1;
+
+        int padding = flexibleSpace / flexibleComponents;
+        int extra = flexibleSpace % flexibleComponents;
+
+        ArrayList<ArrayList<String>> componentBuffers = new ArrayList<>();
+        for (Component child : this.children) {
+            Dimension childDimension = child.computeDimension();
+            int componentWidth = childDimension.minWidth;
+
+            if (!childDimension.fixedWidth) {
+                componentWidth += padding;
+                if (flexibleComponents < extra)
+                    componentWidth++;
+                flexibleComponents--;
+            }
+
+            int componentHeight = childDimension.minHeight;
+            if (childDimension.maxHeight == -1)
+                componentHeight = height;
+            else if (childDimension.maxHeight < height)
+                componentHeight = childDimension.maxHeight;
+
+            ArrayList<String> tempBuffer = new ArrayList<>(height);
+            tempBuffer.addAll(child.draw(componentWidth, componentHeight));
+
+            // Pad the end of the string
+            String blankLine = " ".repeat(componentWidth);
+            for (int i = tempBuffer.size(); i < height; i++)
+                tempBuffer.add(blankLine);
+
+            componentBuffers.add(tempBuffer);
+        }
+
+        // Merge each of the lines together
+        for (ArrayList<String> componentBuffer : componentBuffers) {
+            if (buffer.isEmpty()) {
+                buffer.addAll(componentBuffer);
+                continue;
+            }
+            for (int i = 0; i < buffer.size(); i++) {
+                buffer.set(i, buffer.get(i) + componentBuffer.get(i));
+            }
+        }
     }
 
     private ArrayList<String> drawComponent(int width, int height) {
@@ -241,6 +295,7 @@ public class Component {
 
         // Calculate the minimum width as minimum width should never be -1
         if (this.minWidth == -1) {
+            dimension.minWidth = 0;
             if (this.isRowComponent) {
                 for (Component component : this.children) {
                     Dimension componentDimension = component.computeDimension();
@@ -259,7 +314,8 @@ public class Component {
 
                 for (String bufferLine : this.buffer) {
                     int lineLength = bufferLine.length();
-                    if (lineLength < dimension.minWidth)
+
+                    if (lineLength > dimension.minWidth)
                         dimension.minWidth = lineLength;
                 }
             }
@@ -269,12 +325,13 @@ public class Component {
         }
 
         if (dimension.minHeight == -1) {
+            dimension.minHeight = 0;
             if (this.isRowComponent) {
-                for (Component component : this.children) {
-                    Dimension componentDimension = component.computeDimension();
+                for (Component child : this.children) {
+                    Dimension childDimension = child.computeDimension();
 
-                    if (dimension.minHeight < componentDimension.minHeight)
-                        dimension.minHeight = componentDimension.minHeight;
+                    if (dimension.minHeight < childDimension.minHeight)
+                        dimension.minHeight = childDimension.minHeight;
                 }
             } else if (this.isColumnComponent) {
                 for (Component component : this.children) {
@@ -287,6 +344,11 @@ public class Component {
 
             if (dimension.maxHeight != -1 && dimension.minHeight > dimension.maxHeight)
                 dimension.minHeight = dimension.maxHeight;
+        }
+
+        if (this.hasBorder) {
+            dimension.minWidth += 2;
+            dimension.minHeight += 2;
         }
 
         if (dimension.fixedHeight)

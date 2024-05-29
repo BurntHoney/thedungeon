@@ -5,30 +5,32 @@ public class Room {
     private String lockItem = null;
 
     private boolean visited = false;
-    public ArrayList<Enemy> enemies = new ArrayList<>();
-    public ArrayList<String> loot = new ArrayList<>();
-    public String story;
+    public ArrayList<Character> enemies = new ArrayList<>();
+    public ArrayList<Item> loot = new ArrayList<>();
 
-    Room(String code){
+    Room(String code) {
         this.code = code;
     }
 
-    Room(String code, String lockItem){
+    Room(String code, String lockItem) {
         this.code = code;
         this.lockItem = lockItem;
     }
 
-    public void enter(){
-        if(!this.visited)
+    public void enter() {
+        if (!this.visited)
             this.visited = true;
-        Main.display.printLine("system", story);
     }
 
-    public Boolean isLocked(){return this.code.equals("l");}
-    public boolean unlock(ArrayList<String> inventory){
+    public Boolean isLocked() {
+        return this.code.equals("l");
+    }
+
+    public boolean unlock(ArrayList<String> inventory) {
         if (inventory.contains(this.lockItem)) {
             this.code = " ";
-        };
+        }
+
         return this.code.equals("l");
     }
 }
