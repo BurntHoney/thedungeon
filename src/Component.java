@@ -1,17 +1,11 @@
 import java.util.ArrayList;
 
-/**
- * The Component class help's organise and determin the final output of a
- * component
- */
 public class Component {
     private String title;
 
-    private int width = 0;
+    // Dimension Constraints
     private int minWidth = -1;
     private int maxWidth = -1;
-
-    private int height = 0;
     private int minHeight = -1;
     private int maxHeight = -1;
 
@@ -20,7 +14,7 @@ public class Component {
     private boolean hasBorder = false;
 
     // Row Component Modifiers
-    private boolean isRowComponenet = false;
+    private boolean isRowComponent = false;
     private boolean isColumnComponent = false;
     private ArrayList<Component> children = new ArrayList<Component>(0);
 
@@ -29,14 +23,6 @@ public class Component {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
     }
 
     public void setMinWidth(int width) {
@@ -74,11 +60,11 @@ public class Component {
 
     public void setColumnComponent() {
         this.isColumnComponent = true;
-        this.isRowComponenet = false;
+        this.isRowComponent = false;
     }
 
     public void setRowComponent() {
-        this.isRowComponenet = true;
+        this.isRowComponent = true;
         this.isColumnComponent = false;
     }
 
@@ -102,152 +88,213 @@ public class Component {
         this.buffer.clear();
     }
 
-    public ArrayList<String> constructComponent(int width, int height) {
+    public ArrayList<String> draw(int width, int height) {
+        if (this.isColumnComponent) {
+            buffer.clear();
+            drawColumnComponent(width - 2, height - 2);
+        }
+        if (this.isRowComponent) {
+            buffer.clear();
+            drawRowComponent(width - 2, height - 2);
+        }
+        return drawComponent(width, height);
+    }
+
+    private void drawColumnComponent(int width, int height) {
+        // Find the number of component's with free space
+        int flexibleComponents = 0;
+        int flexibleSpace = height;
+
+        for (Component child : this.children) {
+            Dimension childDimension = child.computeDimension();
+            if (child.maxHeight == -1)
+                flexibleComponents += 1;
+            flexibleSpace -= childDimension.minHeight;
+        }
+
+        // Prevent division by 0 errors
+        if (flexibleComponents == 0)
+            flexibleComponents = 1;
+
+        int padding = flexibleSpace / flexibleComponents;
+        int extra = flexibleSpace % flexibleComponents;
+
+        for (Component child : this.children) {
+            Dimension childDimension = child.computeDimension();
+
+            // Calculate the best width for the component
+            int componentWidth;
+            if (childDimension.maxWidth != -1) {
+                if (childDimension.maxWidth <= width)
+                    componentWidth = childDimension.maxWidth;
+                else if (childDimension.maxWidth > width)
+                    componentWidth = width;
+                else
+                    componentWidth = childDimension.minWidth;
+            } else
+                componentWidth = width;
+
+            // Calculate the best height for the component
+            int componentHeight = childDimension.minHeight;
+            if (childDimension.maxHeight == -1) {
+                componentHeight += padding;
+                if (flexibleComponents <= extra)
+                    componentHeight++;
+                flexibleComponents--;
+            }
+            this.buffer.addAll(child.draw(componentWidth, componentHeight));
+        }
+    }
+
+    private ArrayList<String> drawRowComponent(int width, int height) {
+        ArrayList<String> drawBuffer = new ArrayList<>(height);
+        return drawBuffer;
+    }
+
+    private ArrayList<String> drawComponent(int width, int height) {
+        ArrayList<String> drawBuffer = new ArrayList<>(height);
+
+        if (this.hasBorder) {
+            width -= 2;
+            height -= 2;
+        }
+
+        // Clip and format the buffer
+        String formatString;
         if (this.hasBorder)
-            return this.constructComponentWithBorders(width, height);
-        return this.constructComponentWithoutBorders(width, height);
-    }
+            formatString = "│%-" + width + "s│";
+        else
+            formatString = "%-" + width + "s";
 
-    private ArrayList<String> constructComponentWithoutBorders(int width, int height) {
-        ArrayList<String> buffer = new ArrayList<String>(height);
+        for (int i = 0; i < this.buffer.size(); i++) {
+            String line = this.buffer.get(i);
+            int lineLength = line.length();
+            if (lineLength > width) {
+                int partitionAmount = lineLength / width;
+                if (lineLength % width != 0)
+                    partitionAmount++;
 
-        for (String line : this.buffer) {
-            int padding = width - line.length();
-            buffer.add(line + " ".repeat(padding));
+                for (int j = 0; j < partitionAmount; j++) {
+                    try {
+                        drawBuffer.add(formatString.formatted(line.substring(j * width, (j + 1) * width)));
+                    } catch (StringIndexOutOfBoundsException e) {
+                        drawBuffer.add(formatString.formatted(line.substring(j * width)));
+                    }
+                }
+            } else
+                drawBuffer.add(formatString.formatted(line));
         }
 
-        String blank = " ".repeat(width);
-        for (int i = buffer.size(); i < height; i++) {
-            buffer.add(blank);
-        }
-        return buffer;
-    }
+        // Pad the buffer if it is too small or clip the height if it is too big
+        int bufferSize = drawBuffer.size();
+        if (bufferSize < height) {
+            String blankLine;
+            if (this.hasBorder)
+                blankLine = "│" + " ".repeat(width) + "│";
+            else
+                blankLine = " ".repeat(width);
 
-    private ArrayList<String> constructComponentWithBorders(int width, int height) {
-        width -= 2;
-        height -= 2;
-
-        ArrayList<String> buffer = new ArrayList<String>(height);
-        String header;
-        if (this.title != null) {
-            int padding = width - title.length();
-
-            int leftPadding = padding / 2;
-            int rightPadding = padding / 2;
-
-            if (padding % 2 != 0)
-                leftPadding += 1;
-            header = "┌" + "─".repeat(leftPadding) + title + "─".repeat(rightPadding) + "┐";
+            for (int i = 0; i < height - bufferSize; i++)
+                drawBuffer.add(blankLine);
         } else {
-            header = "┌" + "─".repeat(width) + "┐";
+            for (int i = 0; i < bufferSize - height; i++)
+                drawBuffer.removeFirst();
         }
-        String footer = "└" + "─".repeat(width) + "┘";
-        String blank = "│" + " ".repeat(width) + "│";
 
-        for (String line : this.buffer)
-            buffer.add(String.format("│%-" + width + "s│", line));
+        // Add the header and footer for the border
+        if (this.hasBorder) {
+            if (this.title != null) {
+                int padding = width - title.length();
 
-        for (int i = buffer.size(); i < height; i++)
-            buffer.add(blank);
+                int leftPadding = padding / 2;
+                int rightPadding = padding / 2;
 
-        buffer.addFirst(header);
-        buffer.add(footer);
+                if (padding % 2 != 0)
+                    leftPadding += 1;
 
-        return buffer;
+                drawBuffer.addFirst("┌" + "─".repeat(leftPadding) + title + "─".repeat(rightPadding) + "┐");
+            } else {
+                drawBuffer.addFirst("┌" + "─".repeat(width) + "┐");
+            }
+            drawBuffer.add("└" + "─".repeat(width) + "┘");
+        }
+
+        return drawBuffer;
     }
 
-    public Dimension computeDimensions() {
+    /**
+     * computeDimension helps determine the dimensions for a component to be
+     * returned
+     *
+     * @return Dimension
+     */
+    public Dimension computeDimension() {
         Dimension dimension = new Dimension();
 
+        // Copy the current component dimensions
         dimension.fixedWidth = this.fixedWidth;
         dimension.fixedHeight = this.fixedHeight;
+        dimension.minWidth = this.minWidth;
+        dimension.minHeight = this.minHeight;
+        dimension.maxWidth = this.maxWidth;
+        dimension.maxHeight = this.maxHeight;
 
-        if (this.minWidth != -1)
-            dimension.minWidth = this.minWidth;
-        else {
-            if (this.title != null)
-                dimension.minWidth = this.title.length();
-            else
-                dimension.minWidth = 0;
+        // Calculate the minimum width as minimum width should never be -1
+        if (this.minWidth == -1) {
+            if (this.isRowComponent) {
+                for (Component component : this.children) {
+                    Dimension componentDimension = component.computeDimension();
+                    dimension.minWidth += componentDimension.minWidth;
+                }
+            } else if (this.isColumnComponent) {
+                for (Component component : this.children) {
+                    Dimension componentDimension = component.computeDimension();
 
-            for (String bufferLine : this.buffer) {
-                if (dimension.minWidth < bufferLine.length())
-                    dimension.minWidth = bufferLine.length();
+                    if (dimension.minWidth < componentDimension.minWidth)
+                        dimension.minWidth = componentDimension.minWidth;
+                }
+            } else {
+                if (this.title != null)
+                    dimension.minWidth = this.title.length();
+
+                for (String bufferLine : this.buffer) {
+                    int lineLength = bufferLine.length();
+                    if (lineLength < dimension.minWidth)
+                        dimension.minWidth = lineLength;
+                }
             }
 
-            if (this.hasBorder)
-                dimension.minWidth += 2;
+            if (dimension.maxWidth != -1 && dimension.minWidth > dimension.maxWidth)
+                dimension.minWidth = dimension.maxWidth;
         }
 
-        if (this.minHeight != -1)
-            dimension.minHeight = this.minHeight;
-        else {
-            dimension.minHeight = this.buffer.size();
-            if (this.hasBorder)
-                dimension.minHeight += 2;
+        if (dimension.minHeight == -1) {
+            if (this.isRowComponent) {
+                for (Component component : this.children) {
+                    Dimension componentDimension = component.computeDimension();
+
+                    if (dimension.minHeight < componentDimension.minHeight)
+                        dimension.minHeight = componentDimension.minHeight;
+                }
+            } else if (this.isColumnComponent) {
+                for (Component component : this.children) {
+                    Dimension componentDimension = component.computeDimension();
+                    dimension.minHeight += componentDimension.minHeight;
+                }
+            } else {
+                dimension.minHeight = this.buffer.size();
+            }
+
+            if (dimension.maxHeight != -1 && dimension.minHeight > dimension.maxHeight)
+                dimension.minHeight = dimension.maxHeight;
         }
 
-        if (this.maxWidth != -1)
-            dimension.maxWidth = this.maxWidth;
-
-        if (this.maxHeight != -1)
-            dimension.maxHeight = this.maxHeight;
+        if (dimension.fixedHeight)
+            dimension.maxHeight = dimension.minHeight;
 
         if (dimension.fixedWidth)
             dimension.maxWidth = dimension.minWidth;
 
-        if (dimension.fixedHeight)
-            dimension.maxHeight = dimension.minWidth;
-
-        if (dimension.maxWidth != -1 && dimension.minWidth > dimension.maxWidth)
-            dimension.minWidth = dimension.maxWidth;
-
-        if (dimension.maxHeight != -1 && dimension.minHeight > dimension.maxHeight)
-            dimension.minHeight = dimension.maxHeight;
-
         return dimension;
     }
-
-    public int[] calculateDimensions() {
-        int[] dimensions = new int[4];
-
-        // Calculate the minimum width for the component
-        int minWidth;
-        if (this.title != null)
-            minWidth = this.title.length();
-        else
-            minWidth = this.buffer.get(0).length();
-
-        for (String line : this.buffer)
-            if (minWidth < line.length())
-                minWidth = line.length();
-
-        dimensions[0] = minWidth;
-
-        if (this.fixedWidth)
-            dimensions[1] = dimensions[0];
-        else
-            dimensions[1] = -1;
-
-        dimensions[2] = this.buffer.size();
-        if (this.fixedHeight)
-            dimensions[3] = this.buffer.size();
-        else
-            dimensions[3] = -1;
-
-        if (this.hasBorder) {
-            dimensions[0] += 2;
-            dimensions[2] += 2;
-
-            if (this.fixedWidth)
-                dimensions[1] += 2;
-
-            if (this.fixedHeight)
-                dimensions[3] += 2;
-
-        }
-
-        return dimensions;
-    }
-
 }

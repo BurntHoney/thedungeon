@@ -31,49 +31,49 @@ public class ColumnComponent {
         this.component.setFixedWidth();
     }
 
-    int[] calculateDimensions() {
-        int[] dimensions = new int[4];
-        if (this.title != null) {
-            dimensions[0] = this.title.length();
-        } else {
-            dimensions[0] = 0;
-        }
-        dimensions[2] = 0;
+    // int[] calculateDimensions() {
+    // int[] dimensions = new int[4];
+    // if (this.title != null) {
+    // dimensions[0] = this.title.length();
+    // } else {
+    // dimensions[0] = 0;
+    // }
+    // dimensions[2] = 0;
 
-        for (Component child : this.children) {
-            int[] childDimensions = child.calculateDimensions();
-            if (dimensions[0] < childDimensions[0]) {
-                dimensions[0] = childDimensions[0];
-            }
+    // for (Component child : this.children) {
+    // int[] childDimensions = child.calculateDimensions();
+    // if (dimensions[0] < childDimensions[0]) {
+    // dimensions[0] = childDimensions[0];
+    // }
 
-            dimensions[2] += childDimensions[2];
-        }
+    // dimensions[2] += childDimensions[2];
+    // }
 
-        if (this.component.getDimensions().fixedWidth) {
-            dimensions[1] = -1;
-        } else {
-            dimensions[1] = dimensions[0];
-        }
+    // if (this.component.getDimensions().fixedWidth) {
+    // dimensions[1] = -1;
+    // } else {
+    // dimensions[1] = dimensions[0];
+    // }
 
-        if (this.component.getDimensions().fixedHeight) {
-            dimensions[3] = -1;
-        } else {
-            dimensions[3] = dimensions[2];
-        }
+    // if (this.component.getDimensions().fixedHeight) {
+    // dimensions[3] = -1;
+    // } else {
+    // dimensions[3] = dimensions[2];
+    // }
 
-        if (this.component.hasBorder()) {
-            dimensions[0] += 2;
-            dimensions[2] += 2;
+    // if (this.component.hasBorder()) {
+    // dimensions[0] += 2;
+    // dimensions[2] += 2;
 
-            if (!this.component.getDimensions().fixedWidth)
-                dimensions[1] += 2;
+    // if (!this.component.getDimensions().fixedWidth)
+    // dimensions[1] += 2;
 
-            if (!this.component.getDimensions().fixedHeight)
-                dimensions[3] += 2;
+    // if (!this.component.getDimensions().fixedHeight)
+    // dimensions[3] += 2;
 
-        }
-        return dimensions;
-    }
+    // }
+    // return dimensions;
+    // }
 
     public ArrayList<String> constructComponent(int width, int height) {
         Component component = this.component;

@@ -56,15 +56,15 @@ public class RowComponent {
             }
         }
 
-        if (this.columnChildren != null) {
-            for (ColumnComponent child : this.columnChildren) {
-                int[] childDimensions = child.calculateDimensions();
-                dimensions[0] += childDimensions[0];
-                if (dimensions[2] < childDimensions[2]) {
-                    dimensions[2] = childDimensions[2];
-                }
-            }
-        }
+        // if (this.columnChildren != null) {
+        // for (ColumnComponent child : this.columnChildren) {
+        // int[] childDimensions = child.calculateDimensions();
+        // dimensions[0] += childDimensions[0];
+        // if (dimensions[2] < childDimensions[2]) {
+        // dimensions[2] = childDimensions[2];
+        // }
+        // }
+        // }
 
         if (this.children != null) {
             for (Component child : this.children) {
