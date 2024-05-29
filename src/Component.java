@@ -144,13 +144,11 @@ public class Component {
         String footer = "└" + "─".repeat(width) + "┘";
         String blank = "│" + " ".repeat(width) + "│";
 
-        for (String line : this.buffer) {
+        for (String line : this.buffer)
             buffer.add(String.format("│%-" + width + "s│", line));
-        }
 
-        for (int i = buffer.size(); i < height; i++) {
+        for (int i = buffer.size(); i < height; i++)
             buffer.add(blank);
-        }
 
         buffer.addFirst(header);
         buffer.add(footer);
@@ -215,31 +213,27 @@ public class Component {
 
         // Calculate the minimum width for the component
         int minWidth;
-        if (this.title != null) {
+        if (this.title != null)
             minWidth = this.title.length();
-        } else {
+        else
             minWidth = this.buffer.get(0).length();
-        }
-        for (String line : this.buffer) {
-            if (minWidth < line.length()) {
+
+        for (String line : this.buffer)
+            if (minWidth < line.length())
                 minWidth = line.length();
-            }
-        }
 
         dimensions[0] = minWidth;
 
-        if (this.fixedWidth) {
+        if (this.fixedWidth)
             dimensions[1] = dimensions[0];
-        } else {
+        else
             dimensions[1] = -1;
-        }
 
         dimensions[2] = this.buffer.size();
-        if (this.fixedHeight) {
+        if (this.fixedHeight)
             dimensions[3] = this.buffer.size();
-        } else {
+        else
             dimensions[3] = -1;
-        }
 
         if (this.hasBorder) {
             dimensions[0] += 2;
