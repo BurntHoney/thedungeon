@@ -4,8 +4,8 @@ public class CommandsComponent {
     CommandsComponent() {
         this.commandsComponent = new Component();
         this.commandsComponent.setTitle("Commands");
-        this.commandsComponent.setBorder(true);
-        this.commandsComponent.setFixedHeight(true);
+        this.commandsComponent.setBorder();
+        this.commandsComponent.setFixedHeight();
 
         this.commandsComponent.writeBuffer("move <direction>");
         this.commandsComponent.writeBuffer("attack <target>");

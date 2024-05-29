@@ -5,9 +5,7 @@ class ConsoleComponent {
     ConsoleComponent() {
         this.component = new Component();
         this.component.setTitle("Console");
-        this.component.setBorder(true);
-        this.component.setMinWidth(100);
-        this.component.setMinHeight(25);
+        this.component.setBorder();
     }
 
     public Component getComponent() {

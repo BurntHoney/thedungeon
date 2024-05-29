@@ -87,7 +87,7 @@ public class RowComponent {
         Component component = new Component();
         if (this.title != null)
             component.setTitle(this.title);
-        component.setBorder(this.hasBorder);
+        component.setBorder();
 
         int flexibleComponents = 0;
         int freeSpace = width;

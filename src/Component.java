@@ -7,21 +7,19 @@ import java.util.ArrayList;
 public class Component {
     private String title;
 
-    private Dimension dimension = new Dimension();
-
     private int width = 0;
     private int minWidth = -1;
     private int maxWidth = -1;
 
     private int height = 0;
     private int minHeight = -1;
-    private int maxheight = -1;
+    private int maxHeight = -1;
 
-    private boolean hasBorder = false;
     private boolean fixedHeight = false;
     private boolean fixedWidth = false;
+    private boolean hasBorder = false;
 
-    //
+    // Row Component Modifiers
     private boolean isRowComponenet = false;
     private boolean isColumnComponent = false;
     private ArrayList<Component> children = new ArrayList<Component>(0);
@@ -34,41 +32,42 @@ public class Component {
     }
 
     public void setWidth(int width) {
-        this.dimension.width = width;
+        this.width = width;
     }
 
     public void setHeight(int height) {
-        this.dimension.height = height;
+        this.height = height;
     }
 
     public void setMinWidth(int width) {
-        this.dimension.minWidth = width;
+        this.minWidth = width;
     }
 
     public void setMaxWidth(int width) {
-        this.dimension.maxHeight = width;
+        this.maxHeight = width;
     }
 
     public void setMinHeight(int height) {
-        this.dimension.minHeight = height;
+        this.minHeight = height;
     }
 
     public void setMaxHeight(int height) {
-        this.dimension.maxHeight = height;
+        this.maxHeight = height;
     }
 
     public void setFixedWidth() {
-        this.dimension.fixedWidth = true;
+        this.fixedWidth = true;
     }
 
     public void setFixedHeight() {
-        this.dimension.fixedHeight = true;
+        this.fixedHeight = true;
     }
 
     public void setBorder() {
         this.hasBorder = true;
     }
 
+    // TODO: Delete this
     public boolean hasBorder() {
         return this.hasBorder;
     }
@@ -159,18 +158,14 @@ public class Component {
         return buffer;
     }
 
-    public Dimension getDimensions() {
-        return this.dimension;
-    }
-
     public Dimension computeDimensions() {
         Dimension dimension = new Dimension();
 
-        dimension.fixedWidth = this.dimension.fixedWidth;
-        dimension.fixedHeight = this.dimension.fixedHeight;
+        dimension.fixedWidth = this.fixedWidth;
+        dimension.fixedHeight = this.fixedHeight;
 
-        if (this.dimension.minWidth != -1)
-            dimension.minWidth = this.dimension.minWidth;
+        if (this.minWidth != -1)
+            dimension.minWidth = this.minWidth;
         else {
             if (this.title != null)
                 dimension.minWidth = this.title.length();
@@ -186,19 +181,19 @@ public class Component {
                 dimension.minWidth += 2;
         }
 
-        if (this.dimension.minHeight != -1)
-            dimension.minHeight = this.dimension.minHeight;
+        if (this.minHeight != -1)
+            dimension.minHeight = this.minHeight;
         else {
             dimension.minHeight = this.buffer.size();
             if (this.hasBorder)
                 dimension.minHeight += 2;
         }
 
-        if (this.dimension.maxWidth != -1)
-            dimension.maxWidth = this.dimension.maxWidth;
+        if (this.maxWidth != -1)
+            dimension.maxWidth = this.maxWidth;
 
-        if (this.dimension.maxHeight != -1)
-            dimension.maxHeight = this.dimension.maxHeight;
+        if (this.maxHeight != -1)
+            dimension.maxHeight = this.maxHeight;
 
         if (dimension.fixedWidth)
             dimension.maxWidth = dimension.minWidth;
@@ -212,7 +207,7 @@ public class Component {
         if (dimension.maxHeight != -1 && dimension.minHeight > dimension.maxHeight)
             dimension.minHeight = dimension.maxHeight;
 
-        return this.dimension;
+        return dimension;
     }
 
     public int[] calculateDimensions() {
@@ -233,14 +228,14 @@ public class Component {
 
         dimensions[0] = minWidth;
 
-        if (this.dimension.fixedWidth) {
+        if (this.fixedWidth) {
             dimensions[1] = dimensions[0];
         } else {
             dimensions[1] = -1;
         }
 
         dimensions[2] = this.buffer.size();
-        if (this.dimension.fixedHeight) {
+        if (this.fixedHeight) {
             dimensions[3] = this.buffer.size();
         } else {
             dimensions[3] = -1;
@@ -250,10 +245,10 @@ public class Component {
             dimensions[0] += 2;
             dimensions[2] += 2;
 
-            if (this.dimension.fixedWidth)
+            if (this.fixedWidth)
                 dimensions[1] += 2;
 
-            if (this.dimension.fixedHeight)
+            if (this.fixedHeight)
                 dimensions[3] += 2;
 
         }

@@ -9,7 +9,7 @@ class MapComponent {
         // Initialize Legend Component with
         this.legendComponent = new Component();
         this.legendComponent.setTitle("Legend");
-        this.legendComponent.setBorder(true);
+        this.legendComponent.setBorder();
 
         // Populate Legend
         this.legendComponent.writeBuffer(" x = player");
@@ -20,8 +20,8 @@ class MapComponent {
         this.legendComponent.writeBuffer(" b = boss");
 
         this.minimapComponent = new Component();
-        this.minimapComponent.setFixedWidth(true);
-        this.minimapComponent.setFixedHeight(true);
+        this.minimapComponent.setFixedWidth();
+        this.minimapComponent.setFixedHeight();
 
         // Initialize the parent component
         this.mapComponent = new RowComponent(new Component[] { this.minimapComponent, this.legendComponent });

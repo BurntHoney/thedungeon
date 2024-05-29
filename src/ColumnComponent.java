@@ -19,16 +19,16 @@ public class ColumnComponent {
         component.setTitle(title);
     }
 
-    public void setBorders(Boolean hasBorder) {
-        this.component.setBorder(hasBorder);
+    public void setBorders() {
+        this.component.setBorder();
     }
 
-    public void setFixedWidth(boolean fixed) {
-        this.component.setFixedWidth(fixed);
+    public void setFixedWidth() {
+        this.component.setFixedWidth();
     }
 
-    public void setFixedHeight(boolean fixed) {
-        this.component.setFixedWidth(fixed);
+    public void setFixedHeight() {
+        this.component.setFixedWidth();
     }
 
     int[] calculateDimensions() {
