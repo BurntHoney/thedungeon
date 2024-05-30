@@ -1,3 +1,6 @@
+/**
+ * The main display responsible to grouping all the components and showing it to the user
+ */
 public class Window {
 
     Component windowComponent;

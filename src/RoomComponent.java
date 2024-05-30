@@ -1,3 +1,6 @@
+/**
+ *Displays the room to the user
+ */
 public class RoomComponent {
 
     Component roomComponent;

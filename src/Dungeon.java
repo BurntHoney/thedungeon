@@ -1,3 +1,6 @@
+/**
+ * The Dungeon class contains everything related to the dungeon and helps the player travers and battle
+ */
 public class Dungeon {
 
     Room[][] rooms = new Room[5][5];

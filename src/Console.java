@@ -1,5 +1,8 @@
 import java.util.Scanner;
 
+/**
+ * Small helper class that wraps common and repeated behaviour for interacting with the console
+ */
 public class Console {
 
     /**

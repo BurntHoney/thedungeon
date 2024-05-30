@@ -1,3 +1,6 @@
+/**
+ * Component class to show the availble actions for the player
+ */
 public class CommandsComponent {
 
     Component commandsComponent;

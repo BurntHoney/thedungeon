@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+/**
+ * Helps render component's together for the display
+ */
 public class Component {
 
     private String title;

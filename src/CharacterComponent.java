@@ -1,3 +1,6 @@
+/**
+ * CharacterComponet organises the different component's required to display the character
+ */
 public class CharacterComponent {
 
     Component characterComponent;

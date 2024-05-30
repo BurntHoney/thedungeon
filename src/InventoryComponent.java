@@ -1,3 +1,6 @@
+/**
+ * Shows the inventory to the user
+ */
 public class InventoryComponent {
 
     Component inventoryComponent;

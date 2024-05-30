@@ -1,5 +1,8 @@
 import java.util.Scanner;
 
+/**
+ * Controlls the entire program
+ */
 public class Main {
 
     public static Dungeon dungeon = new Dungeon();

@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+/**
+ * Dispalys the minimap and the legend togther so the player always knows where they are in the game
+ */
 public class MapComponent {
 
     Component legendComponent;

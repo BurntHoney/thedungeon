@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Character class that represents the player and enemies
+ */
 public class Character {
 
     private String name;

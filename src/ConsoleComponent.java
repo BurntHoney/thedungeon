@@ -1,3 +1,6 @@
+/**
+ * Displays the console to the user
+ */
 public class ConsoleComponent {
 
     Component component;

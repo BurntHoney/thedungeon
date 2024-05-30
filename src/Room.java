@@ -1,5 +1,8 @@
 import java.util.ArrayList;
 
+/**
+ * Cointains vital information about the layout of a room
+ */
 public class Room {
 
     private boolean revealed = false;
@@ -10,7 +13,6 @@ public class Room {
     public ArrayList<String> visitMessage = new ArrayList<>();
 
     public ArrayList<Character> enemies = new ArrayList<>();
-    public ArrayList<String> loot = new ArrayList<>();
 
     Room(String code) {
         this.code = code;
