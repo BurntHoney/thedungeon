@@ -16,6 +16,10 @@ public class CommandsComponent {
         this.commandsComponent.writeBuffer("quit");
     }
 
+    /**
+     * Retrieves the underlying component
+     * @return Component
+     */
     public Component getComponent() {
         return this.commandsComponent;
     }

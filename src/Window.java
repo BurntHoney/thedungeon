@@ -33,6 +33,9 @@ public class Window {
         this.displayWidth = width;
     }
 
+    /**
+     * Redraw's the entire display for the user to see
+     */
     public void draw() {
         Component infoColumn = new Component();
         infoColumn.setBorder();
@@ -51,7 +54,10 @@ public class Window {
         this.windowComponent.addChild(infoColumn);
         this.windowComponent.addChild(gameColumn);
 
+        // Clear's the screen giving the illusion of a still window
         System.out.println("\033[H\033[2J");
+
+        // Render the component
         for (String line : this.windowComponent.draw(
                 this.displayWidth,
                 this.displayHeight

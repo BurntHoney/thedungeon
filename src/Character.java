@@ -5,31 +5,55 @@ public class Character {
 
     private String name;
 
-    public int maxHealth = 10;
-    public int currentHealth = 10;
-    public int defence = 0;
-    public int damage = 1;
-    public float critRate = 0.1f;
+    private int maxHealth = 10;
+    private int currentHealth = 10;
+    private int defence = 0;
+    private int damage = 1;
+    private float critRate = 0.1f;
 
     ArrayList<String> imageBuffer = new ArrayList<>();
 
     ArrayList<String> inventory = new ArrayList<>();
 
+    /**
+     * set the name of the character
+     * @param name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * get the name of the character
+     * @return
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * get the character's health
+     * @return
+     */
     public int getHealth() {
         return this.currentHealth;
     }
 
+    /**
+     * get the character's maximum health
+     * @param health
+     */
     public void setMaxHealth(int health) {
         this.maxHealth = health;
         this.currentHealth = health;
+    }
+
+    /**
+     * get's the maximum health for the character
+     * @return int
+     */
+    public int getMaxHealth() {
+        return this.maxHealth;
     }
 
     /**
@@ -42,12 +66,24 @@ public class Character {
         return this.damage;
     }
 
+    /**
+     * Get's the raw damage without any modifiers
+     * @return int
+     */
     public int getRawDamage() {
         return this.damage;
     }
 
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    /**
+     * Get's the defence of the character
+     * @return int
+     */
+    public int getDefence() {
+        return this.defence;
     }
 
     /**
@@ -65,6 +101,10 @@ public class Character {
         }
     }
 
+    /**
+     * Heal the player for a certain amount which is capped at the max health
+     * @param health
+     */
     public void heal(int health) {
         this.currentHealth += health;
         if (this.currentHealth > this.maxHealth) {
@@ -72,6 +112,11 @@ public class Character {
         }
     }
 
+    /**
+     * use an item and apply the affect's to the character
+     * @param itemName
+     * @return int error code
+     */
     public int useItem(String itemName) {
         if (itemName == "") {
             Console.log("system", "please provide the name of the item");
@@ -92,11 +137,19 @@ public class Character {
                 this.defence += 2;
                 break;
             case "lesser_healing_potion":
-                Console.log("debug", "" + Main.player.getHealth());
                 this.heal(5);
                 break;
             case "greater_healing_potion":
                 this.heal(10);
+                break;
+            case "protein":
+                this.damage += 2;
+                break;
+            case "steroids":
+                this.damage += 3;
+                this.maxHealth += 4;
+                this.currentHealth = maxHealth;
+                this.critRate *= 3;
                 break;
         }
 

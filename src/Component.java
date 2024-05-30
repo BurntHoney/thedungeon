@@ -22,70 +22,130 @@ public class Component {
     // Display Buffer
     private ArrayList<String> buffer = new ArrayList<String>();
 
+    /**
+     * set the title of the component
+     * @param title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     * set the minimum with of the component
+     * @param width
+     */
     public void setMinWidth(int width) {
         this.minWidth = width;
     }
 
+    /**
+     * set the maximum width of the component
+     * @param width
+     */
     public void setMaxWidth(int width) {
         this.maxHeight = width;
     }
 
+    /**
+     * set the minimum height of the component
+     * @param height
+     */
     public void setMinHeight(int height) {
         this.minHeight = height;
     }
 
+    /**
+     * set the maximum height of the component
+     * @param height
+     */
     public void setMaxHeight(int height) {
         this.maxHeight = height;
     }
 
+    /**
+     * set the width of the component to never change
+     */
     public void setFixedWidth() {
         this.fixedWidth = true;
     }
 
+    /**
+     * set the height of the component to never change
+     */
     public void setFixedHeight() {
         this.fixedHeight = true;
     }
 
+    /**
+     * surround the component with a border
+     */
     public void setBorder() {
         this.hasBorder = true;
     }
 
+    /**
+     * Allow for the component to render multiple component's within a column
+     */
     public void setColumnComponent() {
         this.isColumnComponent = true;
         this.isRowComponent = false;
     }
 
+    /**
+     * Allow for the component to render multiple components within a row
+     */
     public void setRowComponent() {
         this.isRowComponent = true;
         this.isColumnComponent = false;
     }
 
+    /**
+     * The component to be rendered within a row or column
+     * @param child
+     */
     public void addChild(Component child) {
         this.children.add(child);
     }
 
+    /**
+     * remove all the children from the component's. Sometimes usefull for refreshing the component
+     */
     public void clearChildren() {
         this.children.clear();
         this.clear();
     }
 
+    /**
+     * The text to be rendered within a component
+     * @param line
+     */
     public void writeBuffer(String line) {
         buffer.add(line);
     }
 
+    /**
+     * Write multiple lines of text
+     * @param lines
+     */
     public void batchWriteBuffer(ArrayList<String> lines) {
         buffer.addAll(lines);
     }
 
+    /**
+     * erases the content's within a buffer. usefull for refreshing a component
+     */
     public void clear() {
         this.buffer.clear();
     }
 
+    /**
+     * Construct's the component with the give width and height
+     * @param width the width of the component
+     * @param height the height of the component
+     * @return ArrayList<String> the constructed component
+     */
     public ArrayList<String> draw(int width, int height) {
+        // The border takes up 2 rows and 2 character's so we subtract it
         if (this.hasBorder) {
             width -= 2;
             height -= 2;
@@ -102,6 +162,11 @@ public class Component {
         return drawComponent(width, height);
     }
 
+    /**
+     * Draw's each individual component and organizes it into a column
+     * @param width
+     * @param height
+     */
     private void drawColumnComponent(int width, int height) {
         // Find the number of component's with free space
         int flexibleComponents = 0;
@@ -143,6 +208,11 @@ public class Component {
         }
     }
 
+    /**
+     * Draw's each individual component and organizes it into a row
+     * @param width
+     * @param height
+     */
     private void drawRowComponent(int width, int height) {
         // Find the number of component's with free space
         int flexibleComponents = 0;
@@ -199,6 +269,12 @@ public class Component {
         }
     }
 
+    /**
+     * Draw each component and make sure the content's fit inside of it
+     * @param width
+     * @param height
+     * @return
+     */
     private ArrayList<String> drawComponent(int width, int height) {
         ArrayList<String> drawBuffer = new ArrayList<>(height);
 
@@ -277,7 +353,7 @@ public class Component {
     }
 
     /**
-     * computeDimension helps determine the dimensions for a component to be
+     * computeDimension helps determine the optimal dimensions for a component to be
      * returned
      *
      * @return Dimension

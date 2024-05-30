@@ -8,6 +8,10 @@ public class InventoryComponent {
         this.inventoryComponent.setBorder();
     }
 
+    /**
+     * Retrieves the underlying component
+     * @return Component
+     */
     public Component getComponent() {
         this.inventoryComponent.clear();
         for (String item : Main.player.inventory) {

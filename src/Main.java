@@ -28,16 +28,47 @@ public class Main {
         Console.log("player", prisonerName);
         window.draw();
 
+        Console.log(
+            "System",
+            "you have been trapped in a dungeon by the dragon after failing to steal his gold"
+        );
+        Console.log(
+            "System",
+            "in order to escape you must first learn how to move around"
+        );
+        Console.log(
+            "System",
+            "use the command move <direction> where direction is a cardinal direction n/s/e/w"
+        );
+        Console.log("System", "please use the command move n to move up");
+
+        window.draw();
+
+        String tutorialCommand = Console.readLine(input, "Command: ").strip();
+        while (!tutorialCommand.equals("move n")) {
+            Console.log("System", "please use the command move n move up");
+            window.draw();
+
+            tutorialCommand = Console.readLine(input, "Command: ").strip();
+        }
+        dungeon.movePlayer("n");
+        Console.log("system", "well done making it to your next room");
+        Console.log(
+            "system",
+            "in the next room you can battle your first enemy, good luck"
+        );
+        window.draw();
+
         while (!isGameOver) {
             // Process Commands
-            String command = Console.readLine(input, "Command: ");
+            String command = Console.readLine(input, "Command: ").strip();
             Console.log("player", command);
             int result = processCommand(command);
 
             // If in battle let the enemies attack the player
             if (
                 result == 0 && isInBattle && !enteredRoom
-            ) dungeon.simulateBattle();
+            ) dungeon.attackPlayer();
             if (enteredRoom) enteredRoom = false;
 
             // Redraw the window
@@ -48,9 +79,12 @@ public class Main {
     }
 
     /**
-     * the function processCommand takes care of processing the input and performs an action based of the command
+     * the function processCommand takes care of processing the input and performs
+     * an action based of the command
+     *
      * @param input
-     * @return int 0 for no error, -1 for no error but skip the action and 1 for an error and skip the action
+     * @return int 0 for no error, -1 for no error but skip the action and 1 for an
+     *         error and skip the action
      */
     private static int processCommand(String input) {
         String[] args = input.split(" ", 2);

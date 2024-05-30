@@ -18,6 +18,10 @@ public class RoomComponent {
         this.enemyComponent.setRowComponent();
     }
 
+    /**
+     * Retrieves the underlying component
+     * @return Component
+     */
     public Component getComponent() {
         this.roomComponent.clearChildren();
         this.enemyComponent.clearChildren();

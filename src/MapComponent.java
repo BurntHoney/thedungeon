@@ -15,7 +15,6 @@ class MapComponent {
         this.legendComponent.writeBuffer(" x = player");
         this.legendComponent.writeBuffer(" w = wall");
         this.legendComponent.writeBuffer(" l = locked");
-        this.legendComponent.writeBuffer(" t = treasure");
         this.legendComponent.writeBuffer(" - = hidden");
         this.legendComponent.writeBuffer(" m = miniboss");
         this.legendComponent.writeBuffer(" b = boss");
@@ -34,6 +33,10 @@ class MapComponent {
         this.mapComponent.addChild(this.legendComponent);
     }
 
+    /**
+     * Retrieves the underlying component
+     * @return Component
+     */
     public Component getComponent() {
         this.minimapComponent.clear();
 

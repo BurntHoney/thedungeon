@@ -25,16 +25,24 @@ public class CharacterComponent {
         this.characterComponent.addChild(this.statsComponent);
     }
 
+    /**
+     * Retrieves the underlying component
+     * @return Component
+     */
     public Component getComponent() {
         // Create a health bar
         int fill =
-            (16 * this.character.currentHealth) / this.character.maxHealth;
+            (16 * this.character.getHealth()) / this.character.getMaxHealth();
 
         this.statsComponent.writeBuffer(
                 " [" + "■".repeat(fill) + "□".repeat(16 - fill) + "] "
             );
-        this.statsComponent.writeBuffer("Damage: " + this.character.damage);
-        this.statsComponent.writeBuffer("Defence: " + this.character.defence);
+        this.statsComponent.writeBuffer(
+                "Damage: " + this.character.getRawDamage()
+            );
+        this.statsComponent.writeBuffer(
+                "Defence: " + this.character.getDefence()
+            );
 
         return this.characterComponent;
     }
