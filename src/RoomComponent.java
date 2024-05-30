@@ -9,6 +9,8 @@ public class RoomComponent {
         this.roomComponent.setTitle("Room");
         this.roomComponent.setBorder();
         this.roomComponent.setRowComponent();
+        this.roomComponent.setMinHeight(15);
+        this.roomComponent.setFixedHeight();
 
         this.enemyComponent = new Component();
         this.enemyComponent.setTitle("Enemies");

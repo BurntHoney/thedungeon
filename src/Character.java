@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class Character {
+
     private String name;
 
     public int maxHealth = 10;
@@ -20,7 +21,7 @@ public class Character {
         return this.name;
     }
 
-    public int getHealth(int health) {
+    public int getHealth() {
         return this.currentHealth;
     }
 
@@ -40,8 +41,7 @@ public class Character {
     public void takeDamage(int damage) {
         damage -= defence;
 
-        if (damage <= 0)
-            return;
+        if (damage <= 0) return;
 
         this.currentHealth -= damage;
         if (this.currentHealth < 0) {
@@ -55,5 +55,4 @@ public class Character {
             this.currentHealth = this.maxHealth;
         }
     }
-
 }

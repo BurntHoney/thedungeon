@@ -2,10 +2,13 @@ import java.util.ArrayList;
 
 public class Room {
 
-    public String code;
+    private boolean revealed = false;
+    private String code;
     private Item lockItem = null;
 
     private boolean visited = false;
+    public ArrayList<String> visitMessage = new ArrayList<>();
+
     public ArrayList<Character> enemies = new ArrayList<>();
     public ArrayList<Item> loot = new ArrayList<>();
 
@@ -18,8 +21,23 @@ public class Room {
         this.lockItem = lockItem;
     }
 
+    public void reveal() {
+        this.revealed = true;
+    }
+
+    public String getCode() {
+        if (!revealed) return "-";
+        return this.code;
+    }
+
     public void enter() {
-        if (!this.visited) this.visited = true;
+        if (!this.visited) {
+            for (String message : visitMessage) {
+                String[] message_parts = message.split(":");
+                Console.log(message_parts[0], message_parts[1]);
+            }
+            this.visited = true;
+        }
     }
 
     public Boolean isLocked() {

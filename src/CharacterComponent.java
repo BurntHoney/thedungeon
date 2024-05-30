@@ -28,7 +28,7 @@ public class CharacterComponent {
     public Component getComponent() {
         // Create a health bar
         int fill =
-            16 * (this.character.currentHealth / this.character.maxHealth);
+            (16 * this.character.currentHealth) / this.character.maxHealth;
 
         this.statsComponent.writeBuffer(
                 " [" + "■".repeat(fill) + "□".repeat(16 - fill) + "] "

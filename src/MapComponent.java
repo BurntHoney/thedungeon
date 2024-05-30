@@ -39,9 +39,11 @@ class MapComponent {
         // update map component with the player position
         ArrayList<String> mapCodes = new ArrayList<>(25);
 
-        for (int y = 0; y < 5; y++) for (int x = 0; x < 5; x++) mapCodes.add(
-            Main.dungeon.rooms[y][x].code
-        );
+        for (int y = 0; y < 5; y++) {
+            for (int x = 0; x < 5; x++) {
+                mapCodes.add(Main.dungeon.rooms[y][x].getCode());
+            }
+        }
 
         mapCodes.set(Main.dungeon.yPos * 5 + Main.dungeon.xPos, "x");
 
