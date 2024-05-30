@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-class MapComponent {
+public class MapComponent {
 
     Component legendComponent;
     Component minimapComponent;

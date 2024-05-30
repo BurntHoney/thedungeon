@@ -1,4 +1,4 @@
-class ConsoleComponent {
+public class ConsoleComponent {
 
     Component component;
 
