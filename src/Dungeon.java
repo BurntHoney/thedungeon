@@ -6,33 +6,26 @@ public class Dungeon {
     int yPos = 2;
 
     public Dungeon() {
-        // Items
-        Item gateKey = new Item("gate_key");
-        Item dungeonKey = new Item("dungeon_key");
-        Item lesserHealthPotion = new Item("lesser_health_potion");
-        Item greaterHealthPotion = new Item("greater_health_potion");
-        Item milk = new Item("milk");
-
         // boss
         Character dragon = new Character();
         dragon.setName("dragon");
-        dragon.setHealth(100);
+        dragon.setMaxHealth(100);
         dragon.setDamage(10);
-        dragon.inventory.add(dungeonKey);
+        dragon.inventory.add("dungeon_key");
 
         // miniboss
         Character minotaur = new Character();
         minotaur.setName("minotaur");
-        minotaur.setHealth(50);
+        minotaur.setMaxHealth(50);
         minotaur.setDamage(5);
-        minotaur.inventory.add(gateKey);
+        minotaur.inventory.add("gate_key");
 
         // Gobins
         Character goblin = new Character();
         goblin.setName("Goblin");
-        goblin.setHealth(5);
+        goblin.setMaxHealth(5);
         goblin.setDamage(1);
-        goblin.inventory.add(lesserHealthPotion);
+        goblin.inventory.add("lesser_healing_potion");
 
         // Rooms
         this.rooms[0][0] = new Room(" ");
@@ -46,11 +39,10 @@ public class Dungeon {
 
         this.rooms[1][0] = new Room(" ");
         this.rooms[1][1] = new Room("w");
-        this.rooms[1][2] = new Room("l", gateKey);
+        this.rooms[1][2] = new Room("l", "gate_key");
         this.rooms[1][3] = new Room("w");
         this.rooms[1][4] = new Room("m");
 
-        this.rooms[1][0].enemies.add(goblin);
         this.rooms[1][4].enemies.add(minotaur);
 
         this.rooms[2][0] = new Room(" ");
@@ -69,18 +61,10 @@ public class Dungeon {
         this.rooms[4][1] = new Room(" ");
         this.rooms[4][2] = new Room(" ");
         this.rooms[4][3] = new Room("w");
-        this.rooms[4][4] = new Room("l", dungeonKey);
+        this.rooms[4][4] = new Room("l", "dungeon_key");
 
         // Make sure to reveal all the postions
-        revealIfInBound(yPos, xPos);
-        revealIfInBound(yPos + 1, xPos);
-        revealIfInBound(yPos - 1, xPos);
-        revealIfInBound(yPos, xPos + 1);
-        revealIfInBound(yPos, xPos - 1);
-        revealIfInBound(yPos + 1, xPos + 1);
-        revealIfInBound(yPos + 1, xPos - 1);
-        revealIfInBound(yPos - 1, xPos + 1);
-        revealIfInBound(yPos - 1, xPos - 1);
+        revealBounds();
     }
 
     public int movePlayer(String direction) {
@@ -128,7 +112,7 @@ public class Dungeon {
         }
 
         if (currentRoom.getCode() == "l") {
-            currentRoom.unlock(Main.player.inventory);
+            currentRoom.unlock();
             if (currentRoom.isLocked()) {
                 return 1;
             }
@@ -141,7 +125,11 @@ public class Dungeon {
         xPos += xOffset;
         yPos += yOffset;
 
-        // Reveal new parts of the map
+        revealBounds();
+        return 0;
+    }
+
+    public void revealBounds() {
         revealIfInBound(yPos + 1, xPos);
         revealIfInBound(yPos - 1, xPos);
         revealIfInBound(yPos, xPos + 1);
@@ -150,8 +138,6 @@ public class Dungeon {
         revealIfInBound(yPos + 1, xPos - 1);
         revealIfInBound(yPos - 1, xPos + 1);
         revealIfInBound(yPos - 1, xPos - 1);
-
-        return 0;
     }
 
     private void revealIfInBound(int yPos, int xPos) {

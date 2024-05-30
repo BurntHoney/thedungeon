@@ -1,4 +1,5 @@
 public class InventoryComponent {
+
     Component inventoryComponent;
 
     InventoryComponent() {
@@ -9,8 +10,8 @@ public class InventoryComponent {
 
     public Component getComponent() {
         this.inventoryComponent.clear();
-        for (Item item : Main.player.inventory) {
-            this.inventoryComponent.writeBuffer(item.name);
+        for (String item : Main.player.inventory) {
+            this.inventoryComponent.writeBuffer(" - " + item);
         }
 
         return this.inventoryComponent;

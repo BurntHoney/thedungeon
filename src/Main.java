@@ -12,8 +12,8 @@ public class Main {
 
     public static void main(String[] args) {
         // Initialize Player Defaults
-        player.setDamage(5);
-        player.setHealth(20);
+        player.setDamage(2);
+        player.setMaxHealth(20);
 
         Scanner input = new Scanner(System.in);
 
@@ -47,6 +47,11 @@ public class Main {
         input.close();
     }
 
+    /**
+     * the function processCommand takes care of processing the input and performs an action based of the command
+     * @param input
+     * @return int 0 for no error, -1 for no error but skip the action and 1 for an error and skip the action
+     */
     private static int processCommand(String input) {
         String[] args = input.split(" ", 2);
 
@@ -66,6 +71,8 @@ public class Main {
             case "quit":
                 isGameOver = true;
                 return 0;
+            case "use":
+                return player.useItem(command_args);
             case "resize_width":
                 try {
                     int width = Integer.parseInt(command_args);

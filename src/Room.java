@@ -4,19 +4,19 @@ public class Room {
 
     private boolean revealed = false;
     private String code;
-    private Item lockItem = null;
+    private String lockItem = null;
 
     private boolean visited = false;
     public ArrayList<String> visitMessage = new ArrayList<>();
 
     public ArrayList<Character> enemies = new ArrayList<>();
-    public ArrayList<Item> loot = new ArrayList<>();
+    public ArrayList<String> loot = new ArrayList<>();
 
     Room(String code) {
         this.code = code;
     }
 
-    Room(String code, Item lockItem) {
+    Room(String code, String lockItem) {
         this.code = code;
         this.lockItem = lockItem;
     }
@@ -44,8 +44,8 @@ public class Room {
         return this.code.equals("l");
     }
 
-    public boolean unlock(ArrayList<Item> inventory) {
-        if (inventory.contains(this.lockItem)) {
+    public boolean unlock() {
+        if (Main.player.inventory.contains(this.lockItem)) {
             this.code = " ";
         }
 

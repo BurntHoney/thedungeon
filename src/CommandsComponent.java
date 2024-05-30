@@ -1,4 +1,5 @@
 public class CommandsComponent {
+
     Component commandsComponent;
 
     CommandsComponent() {
@@ -10,6 +11,8 @@ public class CommandsComponent {
         this.commandsComponent.writeBuffer("move <direction>");
         this.commandsComponent.writeBuffer("attack <target>");
         this.commandsComponent.writeBuffer("use <item>");
+        this.commandsComponent.writeBuffer("resize_width <width>");
+        this.commandsComponent.writeBuffer("resize_height <height>");
         this.commandsComponent.writeBuffer("quit");
     }
 
