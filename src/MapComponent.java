@@ -16,6 +16,7 @@ class MapComponent {
         this.legendComponent.writeBuffer(" w = wall");
         this.legendComponent.writeBuffer(" l = locked");
         this.legendComponent.writeBuffer(" t = treasure");
+        this.legendComponent.writeBuffer(" - = hidden");
         this.legendComponent.writeBuffer(" m = miniboss");
         this.legendComponent.writeBuffer(" b = boss");
 
