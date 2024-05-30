@@ -11,6 +11,10 @@ public class Main {
     public static boolean enteredRoom = false;
 
     public static void main(String[] args) {
+        // Initialize Player Defaults
+        player.setDamage(5);
+        player.setHealth(20);
+
         Scanner input = new Scanner(System.in);
 
         Console.log("system", "Welcome to the dungeon prisoner!");

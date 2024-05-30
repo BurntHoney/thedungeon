@@ -20,9 +20,9 @@ public class RoomComponent {
 
     public Component getComponent() {
         this.roomComponent.clearChildren();
-        this.playerComponent = new CharacterComponent(Main.player, true);
-
         this.enemyComponent.clearChildren();
+
+        this.playerComponent = new CharacterComponent(Main.player, true);
 
         Room room = Main.dungeon.rooms[Main.dungeon.yPos][Main.dungeon.xPos];
 

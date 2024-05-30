@@ -9,21 +9,30 @@ public class Dungeon {
         // Items
         Item gateKey = new Item("gate_key");
         Item dungeonKey = new Item("dungeon_key");
+        Item lesserHealthPotion = new Item("lesser_health_potion");
+        Item greaterHealthPotion = new Item("greater_health_potion");
+        Item milk = new Item("milk");
 
         // boss
         Character dragon = new Character();
         dragon.setName("dragon");
+        dragon.setHealth(100);
+        dragon.setDamage(10);
+        dragon.inventory.add(dungeonKey);
 
         // miniboss
         Character minotaur = new Character();
         minotaur.setName("minotaur");
+        minotaur.setHealth(50);
+        minotaur.setDamage(5);
+        minotaur.inventory.add(gateKey);
 
         // Gobins
-        Character grodax = new Character();
-        grodax.setName("grodax");
-
-        Character dalek = new Character();
-        dalek.setName("dalek");
+        Character goblin = new Character();
+        goblin.setName("Goblin");
+        goblin.setHealth(5);
+        goblin.setDamage(1);
+        goblin.inventory.add(lesserHealthPotion);
 
         // Rooms
         this.rooms[0][0] = new Room(" ");
@@ -33,14 +42,16 @@ public class Dungeon {
         this.rooms[0][4] = new Room(" ");
 
         // Add Enemies to rooms
-        this.rooms[0][0].enemies.add(grodax);
-        this.rooms[0][0].enemies.add(dalek);
+        this.rooms[0][0].enemies.add(goblin);
 
         this.rooms[1][0] = new Room(" ");
         this.rooms[1][1] = new Room("w");
         this.rooms[1][2] = new Room("l", gateKey);
         this.rooms[1][3] = new Room("w");
         this.rooms[1][4] = new Room("m");
+
+        this.rooms[1][0].enemies.add(goblin);
+        this.rooms[1][4].enemies.add(minotaur);
 
         this.rooms[2][0] = new Room(" ");
         this.rooms[2][1] = new Room("w");
@@ -218,7 +229,8 @@ public class Dungeon {
                 String.format("You have slain %s!", enemy.getName())
             );
             Main.player.inventory.addAll(enemy.inventory);
-            currentRoom.enemies.remove(enemy);
+            rooms[yPos][xPos].enemies.remove(enemy);
+            Console.log("debug", String.valueOf(currentRoom.enemies.size()));
             if (currentRoom.enemies.isEmpty()) Main.isInBattle = false;
         }
 

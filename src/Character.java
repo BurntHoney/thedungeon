@@ -34,6 +34,10 @@ public class Character {
         return this.damage;
     }
 
+    public int getRawDamage() {
+        return this.damage;
+    }
+
     public void setDamage(int damage) {
         this.damage = damage;
     }

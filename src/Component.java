@@ -70,6 +70,7 @@ public class Component {
 
     public void clearChildren() {
         this.children.clear();
+        this.clear();
     }
 
     public void writeBuffer(String line) {
